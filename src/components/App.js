@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import CreateUserPage from '../pages/CreateUserPage'
 import PostsPage from '../pages/PostsPage'
 import SinglePostPage from '../pages/SinglePostPage'
@@ -11,11 +11,11 @@ const App = () => {
     <>
       <CustomizedSnackbar />
       <Routes>
-        <Route index element={<UsersPage />} />
+        <Route path='/' element={<UsersPage />} />
         <Route path='/posts/:userId/:userName' element={<PostsPage />} />
         <Route path='/single-post/:postId' element={<SinglePostPage />} />
         <Route path='/create-user' element={<CreateUserPage />} />
-        <Route path='*' element={<UsersPage />} />
+        <Route path='*' element={<Navigate to={'/'} />} />
       </Routes>
     </>
   )
