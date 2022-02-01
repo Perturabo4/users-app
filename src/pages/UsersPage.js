@@ -40,7 +40,6 @@ const UsersPage = () => {
     return <ErrorMessage error={error} />
   }
 
-  console.log('Users Page RENDER')
   return load ? (
     <Loader />
   ) : (
