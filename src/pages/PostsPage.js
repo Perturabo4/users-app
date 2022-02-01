@@ -6,9 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PostCard from '../components/PostCard'
 import {
   postsFetch,
-  selectPosts,
+  selectPostsMemo,
   selectPostsError,
-  selectPostsLoad,
+  selectPostsLoad
 } from '../redux/duks/posts'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
@@ -21,14 +21,14 @@ const useStyle = makeStyles({
     alignItems: 'center',
     textDecoration: 'none',
     color: 'blue',
-    fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
-  },
+    fontFamily: '"Roboto","Helvetica","Arial",sans-serif'
+  }
 })
 
 const PostsPage = () => {
   const { userId, userName } = useParams()
   const dispatch = useDispatch()
-  const posts = useSelector(selectPosts)
+  const posts = useSelector(selectPostsMemo)
   const load = useSelector(selectPostsLoad)
   const error = useSelector(selectPostsError)
   const backLinkStyle = useStyle()
@@ -40,6 +40,8 @@ const PostsPage = () => {
   if (error) {
     return <ErrorMessage error={error} />
   }
+
+  console.log('Posts Page RENDER')
 
   return load ? (
     <Loader />

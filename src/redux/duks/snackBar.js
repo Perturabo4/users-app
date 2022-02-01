@@ -1,25 +1,22 @@
 // TYPES
 
+import { fromJS } from 'immutable'
+
 export const SET_SNACKBAR = 'SET_SNACKBAR'
 
 // Reducer
 
-const initialState = {
+const initialState = fromJS({
   open: false,
   type: 'success',
   message: ''
-}
+})
 
 export default function snackBarReducer(state = initialState, action) {
   switch (action.type) {
     case SET_SNACKBAR:
       const { open, type, message } = action.payload
-      return {
-        ...state,
-        open,
-        type,
-        message
-      }
+      return state.set('open', open).set('type', type).set('message', message)
     default:
       return state
   }
@@ -34,6 +31,6 @@ export const setSnackBar = (options) => ({
 
 // Selectors
 
-export const selectOpen = (state) => state.snackBar.open
-export const selectType = (state) => state.snackBar.type
-export const selectMessage = (state) => state.snackBar.message
+export const selectOpen = (state) => state.getIn(['snackBar', 'open'])
+export const selectType = (state) => state.getIn(['snackBar', 'type'])
+export const selectMessage = (state) => state.getIn(['snackBar', 'message'])

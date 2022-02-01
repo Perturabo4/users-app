@@ -7,9 +7,10 @@ import Loader from '../components/Loader'
 import UserCard from '../components/UserCard'
 import {
   selectUsers,
+  selectUsersMemo,
   selectUsersError,
   selectUsersLoad,
-  usersFetch,
+  usersFetch
 } from '../redux/duks/users'
 import ErrorMessage from '../components/ErrorMessage'
 import { LightTooltip } from '../components/LightTooltip'
@@ -23,15 +24,15 @@ const UsersPage = () => {
     dispatch(usersFetch())
   }, [])
 
-  const users = useSelector(selectUsers)
+  const users = useSelector(selectUsersMemo)
   const load = useSelector(selectUsersLoad)
   const error = useSelector(selectUsersError)
 
   const useStyles = makeStyles({
     root: {
       display: 'flex',
-      justifyContent: 'center',
-    },
+      justifyContent: 'center'
+    }
   })
 
   const styles = useStyles()
@@ -40,6 +41,7 @@ const UsersPage = () => {
     return <ErrorMessage error={error} />
   }
 
+  console.log('Users Page RENDER')
   return load ? (
     <Loader />
   ) : (

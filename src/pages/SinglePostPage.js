@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Loader from '../components/Loader'
 import {
-  selectSinglePost,
+  selectSinglePostMemo,
   selectSinglePostError,
   selectSinglePostLoad,
   singlePostFetch
@@ -17,7 +17,7 @@ const SinglePostPage = () => {
   const { postId } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const post = useSelector(selectSinglePost)
+  const post = useSelector(selectSinglePostMemo)
   const load = useSelector(selectSinglePostLoad)
   const error = useSelector(selectSinglePostError)
 

@@ -1,4 +1,5 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import { combineReducers } from 'redux-immutable'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from '@redux-saga/core'
 import { all, spawn } from 'redux-saga/effects'

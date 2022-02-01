@@ -96,6 +96,8 @@ const CreateUserPage = () => {
     dispatch(userCreateRequest(data))
   }
 
+  console.log('Create Users Page RENDER')
+
   return (
     <Container className={classes.container} maxWidth='xs'>
       <Typography variant='h4' component='h1' sx={{ textAlign: 'center' }}>

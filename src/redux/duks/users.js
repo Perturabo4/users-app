@@ -1,5 +1,7 @@
 import axios from 'axios'
+import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
+import { createSelector } from 'reselect'
 import { baseUrlPath } from '../../api'
 
 // ALL USERS TYPES
@@ -10,20 +12,20 @@ export const USERS_FETCH_ERROR = 'USERS_FETCH_ERROR'
 
 // Reducer
 
-const initialState = {
+const initialState = fromJS({
   load: false,
   users: [],
   error: null
-}
+})
 
 export default function usersReducer(state = initialState, action) {
   switch (action.type) {
     case USERS_FETCH:
-      return { ...state, load: true }
+      return state.set('load', true)
     case USERS_FETCHED:
-      return { ...state, load: false, users: [...action.payload] }
+      return state.set('load', false).set('users', fromJS(action.payload))
     case USERS_FETCH_ERROR:
-      return { ...state, load: false, error: action.payload }
+      return state.set('load', false).set('error', action.payload)
     default:
       return state
   }
@@ -40,9 +42,13 @@ export const usersFetchError = (error) => ({
 
 // Selectors
 
-export const selectUsers = (state) => state.allUsers.users
-export const selectUsersLoad = (state) => state.allUsers.load
-export const selectUsersError = (state) => state.allUsers.error
+export const selectUsers = (state) => state.getIn(['allUsers', 'users'])
+export const selectUsersLoad = (state) => state.getIn(['allUsers', 'load'])
+export const selectUsersError = (state) => state.getIn(['allUsers', 'error'])
+
+export const selectUsersMemo = createSelector(selectUsers, (users) =>
+  users.toJS()
+)
 
 // Requests
 

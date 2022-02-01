@@ -1,5 +1,7 @@
 import axios from 'axios'
+import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
+import { createSelector } from 'reselect'
 import { baseUrlPath } from '../../api'
 import { setSnackBar } from './snackBar'
 
@@ -11,20 +13,20 @@ export const USER_CREATE_ERROR = 'USER_CREATE_ERROR'
 
 // Reducer
 
-const initialState = {
+const initialState = fromJS({
   load: false,
   user: {},
   error: null
-}
+})
 
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
     case USER_CREATE_REQUEST:
-      return { ...state, load: true }
+      return state.set('load', false)
     case USER_CREATE_SUCCESS:
-      return { ...state, load: false, user: { ...action.payload } }
+      return state.set('load', false).set('users', fromJS(action.payload))
     case USER_CREATE_ERROR:
-      return { ...state, load: false, error: action.payload }
+      return state.set('load', false).set('error', action.payload)
     default:
       return state
   }
@@ -47,9 +49,13 @@ export const userCreateError = (error) => ({
 
 // Selectors
 
-export const selectNewUser = (state) => state.newUser.user
-export const selectNewUserLoad = (state) => state.newUser.load
-export const selectNewUserError = (state) => state.newUser.error
+export const selectNewUser = (state) => state.getIn(['newUser', 'user'])
+export const selectNewUserLoad = (state) => state.getIn(['newUser', 'load'])
+export const selectNewUserError = (state) => state.getIn(['newUser', 'error'])
+
+export const selectNewUserMemo = createSelector(selectNewUser, (user) =>
+  user.toJS()
+)
 
 // Requests
 

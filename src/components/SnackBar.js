@@ -27,6 +27,7 @@ export default function CustomizedSnackbar() {
 
     dispatch(setSnackBar({ open: false }))
   }
+  console.log('SnackBar RENDER')
 
   return (
     <Snackbar
