@@ -1,6 +1,8 @@
 import { createStore, applyMiddleware } from 'redux'
 import { combineReducers } from 'redux-immutable'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { createReduxHistoryContext } from 'redux-first-history'
+import { createBrowserHistory } from 'history'
 import createSagaMiddleware from '@redux-saga/core'
 import { all, spawn } from 'redux-saga/effects'
 import postsReducer, { watchPostsFetch } from './duks/posts'
@@ -9,9 +11,16 @@ import singlePostReducer, { watchSinglePostFetch } from './duks/singlePost'
 import createUserReducer, { watchCreateUserRequest } from './duks/createUser'
 import snackBarReducer from './duks/snackBar'
 
+const { createReduxHistory, routerMiddleware, routerReducer } =
+  createReduxHistoryContext({
+    history: createBrowserHistory()
+    //other options if needed
+  })
+
 const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
+  router: routerReducer,
   allUsers: usersReducer,
   userPosts: postsReducer,
   singlePost: singlePostReducer,
@@ -19,10 +28,12 @@ const rootReducer = combineReducers({
   snackBar: snackBarReducer
 })
 
-const store = createStore(
+export const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
+  composeWithDevTools(applyMiddleware(routerMiddleware, sagaMiddleware))
 )
+
+export const history = createReduxHistory(store)
 
 function* rootSaga() {
   yield all([
@@ -34,5 +45,3 @@ function* rootSaga() {
 }
 
 sagaMiddleware.run(rootSaga)
-
-export default store
