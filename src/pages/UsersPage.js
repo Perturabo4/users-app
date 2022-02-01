@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import UserCard from '../components/UserCard'
 import {
-  selectUsers,
   selectUsersMemo,
   selectUsersError,
   selectUsersLoad,
