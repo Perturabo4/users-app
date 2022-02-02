@@ -13,8 +13,9 @@ import snackBarReducer from './duks/snackBar'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
-    history: createBrowserHistory()
-    //other options if needed
+    history: createBrowserHistory(),
+    selectRouterState: (state) => state.get('router'),
+    reduxTravelling: true
   })
 
 const sagaMiddleware = createSagaMiddleware()
@@ -30,7 +31,10 @@ const rootReducer = combineReducers({
 
 export const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(routerMiddleware, sagaMiddleware))
+  composeWithDevTools(
+    applyMiddleware(routerMiddleware),
+    applyMiddleware(sagaMiddleware)
+  )
 )
 
 export const history = createReduxHistory(store)

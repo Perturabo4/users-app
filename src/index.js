@@ -1,16 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { HistoryRouter as Router } from 'redux-first-history/rr6'
 import { Provider } from 'react-redux'
 import './index.css'
 import App from './components/App'
-import { store } from './redux'
+import { store, history } from './redux'
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <App />
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById('root')
 )
