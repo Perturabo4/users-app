@@ -61,7 +61,7 @@ const getPosts = async (id) => {
 
 // Sagas
 
-export const handlePostsFetch = function* () {
+export const postsFetchSaga = function* () {
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getPosts, userId)
@@ -78,6 +78,6 @@ export const handlePostsFetch = function* () {
   }
 }
 
-export const watchPostsFetch = function* () {
-  yield takeEvery(POSTS_FETCH, handlePostsFetch)
+export const watchPostsFetchSaga = function* () {
+  yield takeEvery(POSTS_FETCH, postsFetchSaga)
 }

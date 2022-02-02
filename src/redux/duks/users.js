@@ -59,7 +59,7 @@ const getUsers = async () => {
 
 // Sagas
 
-export const handleUsersFetch = function* () {
+export const usersFetchSaga = function* () {
   try {
     const users = yield call(getUsers)
     yield put(usersFetched(users))
@@ -68,6 +68,6 @@ export const handleUsersFetch = function* () {
   }
 }
 
-export const watchUsersFetch = function* () {
-  yield takeEvery(USERS_FETCH, handleUsersFetch)
+export const watchUsersFetchSaga = function* () {
+  yield takeEvery(USERS_FETCH, usersFetchSaga)
 }

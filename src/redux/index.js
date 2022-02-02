@@ -5,10 +5,10 @@ import { createReduxHistoryContext } from 'redux-first-history'
 import { createBrowserHistory } from 'history'
 import createSagaMiddleware from '@redux-saga/core'
 import { all, spawn } from 'redux-saga/effects'
-import postsReducer, { watchPostsFetch } from './duks/posts'
-import usersReducer, { watchUsersFetch } from './duks/users'
-import singlePostReducer, { watchSinglePostFetch } from './duks/singlePost'
-import createUserReducer, { watchCreateUserRequest } from './duks/createUser'
+import postsReducer, { watchPostsFetchSaga } from './duks/posts'
+import usersReducer, { watchUsersFetchSaga } from './duks/users'
+import singlePostReducer, { watchSinglePostFetchSaga } from './duks/singlePost'
+import createUserReducer, { watchCreateUserSaga } from './duks/createUser'
 import snackBarReducer from './duks/snackBar'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
@@ -41,10 +41,10 @@ export const history = createReduxHistory(store)
 
 function* rootSaga() {
   yield all([
-    spawn(watchUsersFetch),
-    spawn(watchPostsFetch),
-    spawn(watchSinglePostFetch),
-    spawn(watchCreateUserRequest)
+    spawn(watchUsersFetchSaga),
+    spawn(watchPostsFetchSaga),
+    spawn(watchSinglePostFetchSaga),
+    spawn(watchCreateUserSaga)
   ])
 }
 

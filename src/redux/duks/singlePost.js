@@ -3,7 +3,6 @@ import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath } from '../../api'
-import { selectPosts } from './posts'
 
 // Types
 
@@ -23,17 +22,10 @@ const initialState = fromJS({
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
     case SINGLE_POST_FETCH:
-      // return { ...state, load: true, postId: action.payload }
       return state.set('load', true).set('postId', action.payload)
     case SINGLE_POST_FETCHED:
-      // return {
-      //   ...state,
-      //   load: false,
-      //   post: { ...action.payload },
-      // }
       return state.set('load', false).set('post', fromJS(action.payload))
     case SINGLE_POST_FETCH_ERROR:
-      // return { ...state, load: false, error: action.payload }
       return state.set('load', false).set('error', action)
     default:
       return state
@@ -78,7 +70,7 @@ const getSinglePost = async (id) => {
 
 // Sagas
 
-export const handleSinglePostFetch = function* () {
+export const singlePostFetchSaga = function* () {
   try {
     const postId = yield select(selectSinglePostId)
 
@@ -90,6 +82,6 @@ export const handleSinglePostFetch = function* () {
   }
 }
 
-export const watchSinglePostFetch = function* () {
-  yield takeEvery(SINGLE_POST_FETCH, handleSinglePostFetch)
+export const watchSinglePostFetchSaga = function* () {
+  yield takeEvery(SINGLE_POST_FETCH, singlePostFetchSaga)
 }
