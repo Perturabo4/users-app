@@ -3,17 +3,17 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import PostCard from '../components/PostCard'
+import PostCard from '../../common/components/PostCard'
 import {
   postsFetch,
   selectPostsMemo,
   selectPostsError,
   selectPostsLoad
-} from '../redux/duks/posts'
+} from './posts'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
-import Loader from '../components/Loader'
-import ErrorMessage from '../components/ErrorMessage'
+import Loader from '../../common/components/Loader'
+import ErrorMessage from '../../common/components/ErrorMessage'
 
 const useStyle = makeStyles({
   link: {

@@ -3,16 +3,16 @@ import { makeStyles } from '@mui/styles'
 import AddIcon from '@mui/icons-material/Add'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Loader from '../components/Loader'
-import UserCard from '../components/UserCard'
+import Loader from '../../common/components/Loader'
+import UserCard from '../../common/components/UserCard'
 import {
   selectUsersMemo,
   selectUsersError,
   selectUsersLoad,
   usersFetch
-} from '../redux/duks/users'
-import ErrorMessage from '../components/ErrorMessage'
-import { LightTooltip } from '../components/LightTooltip'
+} from './users'
+import ErrorMessage from '../../common/components/ErrorMessage'
+import { LightTooltip } from '../../common/components/LightTooltip'
 import { useNavigate } from 'react-router-dom'
 
 const UsersPage = () => {

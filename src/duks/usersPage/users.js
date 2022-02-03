@@ -2,13 +2,13 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../api'
+import { baseUrlPath } from '../../common/api'
 
 // ALL USERS TYPES
 
-export const USERS_FETCH = 'USERS_FETCH'
-export const USERS_FETCHED = 'USERS_FETCHED'
-export const USERS_FETCH_ERROR = 'USERS_FETCH_ERROR'
+const USERS_FETCH_REQUEST = 'pet-app/duks/usersPage/USERS_FETCH_REQUEST'
+const USERS_FETCH_SUCCES = 'pet-app/duks/usersPage/USERS_FETCH_SUCCES'
+const USERS_FETCH_ERROR = 'pet-app/duks/usersPage/USERS_FETCH_ERROR'
 
 // Reducer
 
@@ -20,9 +20,9 @@ const initialState = fromJS({
 
 export default function usersReducer(state = initialState, action) {
   switch (action.type) {
-    case USERS_FETCH:
+    case USERS_FETCH_REQUEST:
       return state.set('load', true)
-    case USERS_FETCHED:
+    case USERS_FETCH_SUCCES:
       return state.set('load', false).set('users', fromJS(action.payload))
     case USERS_FETCH_ERROR:
       return state.set('load', false).set('error', action.payload)
@@ -33,8 +33,11 @@ export default function usersReducer(state = initialState, action) {
 
 // Actions
 
-export const usersFetch = () => ({ type: USERS_FETCH })
-export const usersFetched = (users) => ({ type: USERS_FETCHED, payload: users })
+export const usersFetch = () => ({ type: USERS_FETCH_REQUEST })
+export const usersFetched = (users) => ({
+  type: USERS_FETCH_SUCCES,
+  payload: users
+})
 export const usersFetchError = (error) => ({
   type: USERS_FETCH_ERROR,
   payload: error
@@ -69,5 +72,5 @@ export const usersFetchSaga = function* () {
 }
 
 export const watchUsersFetchSaga = function* () {
-  yield takeEvery(USERS_FETCH, usersFetchSaga)
+  yield takeEvery(USERS_FETCH_REQUEST, usersFetchSaga)
 }

@@ -4,14 +4,14 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import Loader from '../components/Loader'
+import Loader from '../../common/components/Loader'
 import {
   selectSinglePostMemo,
   selectSinglePostError,
   selectSinglePostLoad,
   singlePostFetch
-} from '../redux/duks/singlePost'
-import ErrorMessage from '../components/ErrorMessage'
+} from './singlePost'
+import ErrorMessage from '../../common/components/ErrorMessage'
 
 const SinglePostPage = () => {
   const { postId } = useParams()

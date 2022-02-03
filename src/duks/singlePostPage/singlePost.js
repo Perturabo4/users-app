@@ -2,13 +2,13 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../api'
+import { baseUrlPath } from '../../common/api'
 
 // Types
 
-export const SINGLE_POST_FETCH = 'SINGLE_POST_FETCH'
-export const SINGLE_POST_FETCHED = 'SINGLE_POST_FETCHED'
-export const SINGLE_POST_FETCH_ERROR = 'SINGLE_POST_FETCH_ERROR'
+const POST_FETCH_REQUEST = 'pet-app/duks/singlePostPage/POST_FETCH_REQUEST'
+const POST_FETCH_SUCCESS = 'pet-app/duks/singlePostPage/POST_FETCH_SUCCESS'
+const POST_FETCH_ERROR = 'pet-app/duks/singlePostPage/POST_FETCH_ERROR'
 
 // Reducer
 
@@ -21,11 +21,11 @@ const initialState = fromJS({
 
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
-    case SINGLE_POST_FETCH:
+    case POST_FETCH_REQUEST:
       return state.set('load', true).set('postId', action.payload)
-    case SINGLE_POST_FETCHED:
+    case POST_FETCH_SUCCESS:
       return state.set('load', false).set('post', fromJS(action.payload))
-    case SINGLE_POST_FETCH_ERROR:
+    case POST_FETCH_ERROR:
       return state.set('load', false).set('error', action)
     default:
       return state
@@ -35,15 +35,15 @@ export default function singlePostReducer(state = initialState, action) {
 // Actions
 
 export const singlePostFetch = (userId) => ({
-  type: SINGLE_POST_FETCH,
+  type: POST_FETCH_REQUEST,
   payload: userId
 })
 export const singlePostFetched = (post) => ({
-  type: SINGLE_POST_FETCHED,
+  type: POST_FETCH_SUCCESS,
   payload: post
 })
 export const singlePostFetchError = (error) => ({
-  type: SINGLE_POST_FETCH_ERROR,
+  type: POST_FETCH_ERROR,
   payload: error
 })
 
@@ -83,5 +83,5 @@ export const singlePostFetchSaga = function* () {
 }
 
 export const watchSinglePostFetchSaga = function* () {
-  yield takeEvery(SINGLE_POST_FETCH, singlePostFetchSaga)
+  yield takeEvery(POST_FETCH_REQUEST, singlePostFetchSaga)
 }
