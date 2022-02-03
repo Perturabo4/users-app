@@ -62,7 +62,7 @@ const getUsers = async () => {
 
 // Sagas
 
-export const usersFetchSaga = function* () {
+export const handleUsersFetch = function* () {
   try {
     const users = yield call(getUsers)
     yield put(usersFetchSuccess(users))
@@ -71,6 +71,11 @@ export const usersFetchSaga = function* () {
   }
 }
 
+<<<<<<< HEAD:src/duks/usersPage/users.js
 export const watchUsersFetchSaga = function* () {
   yield takeEvery(USERS_FETCH_REQUEST, usersFetchSaga)
+=======
+export const watchUsersFetch = function* () {
+  yield takeEvery(USERS_FETCH, handleUsersFetch)
+>>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/users.js
 }

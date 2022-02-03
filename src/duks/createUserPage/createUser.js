@@ -66,7 +66,7 @@ const createNewUserRequest = async (obj) => {
 
 // Sagas
 
-export const createUserSaga = function* ({ payload }) {
+export const handleCreateNewUser = function* ({ payload }) {
   try {
     const user = yield call(createNewUserRequest, payload)
     yield put(userCreateSuccess(user))
@@ -89,6 +89,6 @@ export const createUserSaga = function* ({ payload }) {
   }
 }
 
-export const watchCreateUserSaga = function* () {
-  yield takeEvery(USER_CREATE_REQUEST, createUserSaga)
+export const watchCreateUserRequest = function* () {
+  yield takeEvery(USER_CREATE_REQUEST, handleCreateNewUser)
 }

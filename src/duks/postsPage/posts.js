@@ -67,7 +67,7 @@ const getPosts = async (id) => {
 
 // Sagas
 
-export const postsFetchSaga = function* () {
+export const handlePostsFetch = function* () {
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getPosts, userId)
@@ -84,6 +84,11 @@ export const postsFetchSaga = function* () {
   }
 }
 
+<<<<<<< HEAD:src/duks/postsPage/posts.js
 export const watchPostsFetchSaga = function* () {
   yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
+=======
+export const watchPostsFetch = function* () {
+  yield takeEvery(POSTS_FETCH, handlePostsFetch)
+>>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/posts.js
 }
