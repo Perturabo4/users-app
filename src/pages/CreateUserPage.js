@@ -6,10 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Box, Container, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import Input from '../../common/components/Input'
-import PrimaryButton from '../../common/components/PrimaryButton'
-import { selectNewUserLoad, userCreateRequest } from './createUser'
-import Loader from '../../common/components/Loader'
+import Input from '../components/Input'
+import PrimaryButton from '../components/PrimaryButton'
+import { selectNewUserLoad, userCreateRequest } from '../redux/duks/createUser'
+import Loader from '../components/Loader'
 
 const useStyle = makeStyles({
   container: {

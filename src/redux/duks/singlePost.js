@@ -3,17 +3,21 @@ import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 <<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
+<<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
 import { baseUrlPath } from '../../common/api'
 =======
 import { baseUrlPath } from '../../api'
 import { selectPosts } from './posts'
 >>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/singlePost.js
+=======
+import { baseUrlPath } from '../../api'
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/singlePost.js
 
 // Types
 
-const POST_FETCH_REQUEST = 'pet-app/duks/singlePostPage/POST_FETCH_REQUEST'
-const POST_FETCH_SUCCESS = 'pet-app/duks/singlePostPage/POST_FETCH_SUCCESS'
-const POST_FETCH_ERROR = 'pet-app/duks/singlePostPage/POST_FETCH_ERROR'
+export const SINGLE_POST_FETCH = 'SINGLE_POST_FETCH'
+export const SINGLE_POST_FETCHED = 'SINGLE_POST_FETCHED'
+export const SINGLE_POST_FETCH_ERROR = 'SINGLE_POST_FETCH_ERROR'
 
 // Reducer
 
@@ -27,10 +31,15 @@ const initialState = fromJS({
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
 <<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
+<<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
     case POST_FETCH_REQUEST:
+=======
+    case SINGLE_POST_FETCH:
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/singlePost.js
       return state.set('load', true).set('postId', action.payload)
-    case POST_FETCH_SUCCESS:
+    case SINGLE_POST_FETCHED:
       return state.set('load', false).set('post', fromJS(action.payload))
+<<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
     case POST_FETCH_ERROR:
 =======
     case SINGLE_POST_FETCH:
@@ -46,6 +55,9 @@ export default function singlePostReducer(state = initialState, action) {
     case SINGLE_POST_FETCH_ERROR:
       // return { ...state, load: false, error: action.payload }
 >>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/singlePost.js
+=======
+    case SINGLE_POST_FETCH_ERROR:
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/singlePost.js
       return state.set('load', false).set('error', action)
     default:
       return state
@@ -54,6 +66,7 @@ export default function singlePostReducer(state = initialState, action) {
 
 // Actions
 
+<<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
 export const postFetchRequest = (userId) => ({
   type: POST_FETCH_REQUEST,
   payload: userId
@@ -64,6 +77,18 @@ export const postFetchSuccess = (post) => ({
 })
 export const postFetchError = (error) => ({
   type: POST_FETCH_ERROR,
+=======
+export const singlePostFetch = (userId) => ({
+  type: SINGLE_POST_FETCH,
+  payload: userId
+})
+export const singlePostFetched = (post) => ({
+  type: SINGLE_POST_FETCHED,
+  payload: post
+})
+export const singlePostFetchError = (error) => ({
+  type: SINGLE_POST_FETCH_ERROR,
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/singlePost.js
   payload: error
 })
 
@@ -104,9 +129,13 @@ export const handleSinglePostFetch = function* () {
 
 <<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
 export const watchSinglePostFetchSaga = function* () {
+<<<<<<< HEAD:src/duks/singlePostPage/singlePost.js
   yield takeEvery(POST_FETCH_REQUEST, singlePostFetchSaga)
 =======
 export const watchSinglePostFetch = function* () {
   yield takeEvery(SINGLE_POST_FETCH, handleSinglePostFetch)
 >>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/singlePost.js
+=======
+  yield takeEvery(SINGLE_POST_FETCH, singlePostFetchSaga)
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/singlePost.js
 }

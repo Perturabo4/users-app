@@ -1,7 +1,8 @@
+// TYPES
+
 import { fromJS } from 'immutable'
 
-// TYPES
-const SET_SNACKBAR = 'pet-app/duks/customizedSnackbar/SET_SNACKBAR'
+export const SET_SNACKBAR = 'SET_SNACKBAR'
 
 // Reducer
 

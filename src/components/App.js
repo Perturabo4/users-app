@@ -1,10 +1,10 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import CreateUserPage from '../duks/createUserPage/CreateUserPage'
-import PostsPage from '../duks/postsPage/PostsPage'
-import SinglePostPage from '../duks/singlePostPage/SinglePostPage'
-import UsersPage from '../duks/usersPage/UsersPage'
-import CustomizedSnackbar from '../duks/customizedSnackbar/CustomizedSnackbar'
+import CreateUserPage from '../pages/CreateUserPage'
+import PostsPage from '../pages/PostsPage'
+import SinglePostPage from '../pages/SinglePostPage'
+import UsersPage from '../pages/UsersPage'
+import CustomizedSnackbar from './SnackBar'
 
 const App = () => {
   return (

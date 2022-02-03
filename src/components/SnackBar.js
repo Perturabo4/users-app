@@ -1,7 +1,12 @@
 import * as React from 'react'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
-import { selectMessage, selectOpen, selectType, setSnackBar } from './snackBar'
+import {
+  selectMessage,
+  selectOpen,
+  selectType,
+  setSnackBar
+} from '../redux/duks/snackBar'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Alert = React.forwardRef(function Alert(props, ref) {

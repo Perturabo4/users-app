@@ -4,14 +4,20 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import Loader from '../../common/components/Loader'
+import Loader from '../components/Loader'
 import {
   selectSinglePostMemo,
   selectSinglePostError,
   selectSinglePostLoad,
+<<<<<<< HEAD:src/duks/singlePostPage/SinglePostPage.js
   postFetchRequest
 } from './singlePost'
 import ErrorMessage from '../../common/components/ErrorMessage'
+=======
+  singlePostFetch
+} from '../redux/duks/singlePost'
+import ErrorMessage from '../components/ErrorMessage'
+>>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/pages/SinglePostPage.js
 
 const SinglePostPage = () => {
   const { postId } = useParams()

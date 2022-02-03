@@ -2,14 +2,14 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../common/api'
-import { setSnackBar } from '../customizedSnackbar/snackBar'
+import { baseUrlPath } from '../../api'
+import { setSnackBar } from './snackBar'
 
 // CREATE USER TYPES
 
-const USER_CREATE_REQUEST = 'pet-app/duks/createUserPage/USER_CREATE_REQUEST'
-const USER_CREATE_SUCCESS = 'pet-app/duks/createUserPage/USER_CREATE_SUCCESS'
-const USER_CREATE_ERROR = 'pet-app/duks/createUserPage/USER_CREATE_ERROR'
+export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST'
+export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS'
+export const USER_CREATE_ERROR = 'USER_CREATE_ERROR'
 
 // Reducer
 
