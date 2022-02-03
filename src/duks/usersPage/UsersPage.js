@@ -9,7 +9,7 @@ import {
   selectUsersMemo,
   selectUsersError,
   selectUsersLoad,
-  usersFetch
+  usersFetchRequest
 } from './users'
 import ErrorMessage from '../../common/components/ErrorMessage'
 import { LightTooltip } from '../../common/components/LightTooltip'
@@ -20,7 +20,7 @@ const UsersPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(usersFetch())
+    dispatch(usersFetchRequest())
   }, [])
 
   const users = useSelector(selectUsersMemo)

@@ -9,7 +9,7 @@ import {
   selectSinglePostMemo,
   selectSinglePostError,
   selectSinglePostLoad,
-  singlePostFetch
+  postFetchRequest
 } from './singlePost'
 import ErrorMessage from '../../common/components/ErrorMessage'
 
@@ -22,7 +22,7 @@ const SinglePostPage = () => {
   const error = useSelector(selectSinglePostError)
 
   useEffect(() => {
-    dispatch(singlePostFetch(postId))
+    dispatch(postFetchRequest(postId))
   }, [])
 
   if (error) {

@@ -34,11 +34,11 @@ export default function postsReducer(state = initialState, action) {
 
 // Actions
 
-export const postsFetch = (userId) => ({
+export const postsFetchRequest = (userId) => ({
   type: POSTS_FETCH_REQUEST,
   payload: userId
 })
-export const postsFetched = (posts) => ({
+export const postsFetchSuccess = (posts) => ({
   type: POSTS_FETCH_SUCCESS,
   payload: posts
 })
@@ -78,7 +78,7 @@ export const postsFetchSaga = function* () {
       return post
     })
 
-    yield put(postsFetched(cropedPosts))
+    yield put(postsFetchSuccess(cropedPosts))
   } catch (error) {
     yield put(postsFetchError(error.message))
   }

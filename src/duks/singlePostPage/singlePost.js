@@ -34,15 +34,15 @@ export default function singlePostReducer(state = initialState, action) {
 
 // Actions
 
-export const singlePostFetch = (userId) => ({
+export const postFetchRequest = (userId) => ({
   type: POST_FETCH_REQUEST,
   payload: userId
 })
-export const singlePostFetched = (post) => ({
+export const postFetchSuccess = (post) => ({
   type: POST_FETCH_SUCCESS,
   payload: post
 })
-export const singlePostFetchError = (error) => ({
+export const postFetchError = (error) => ({
   type: POST_FETCH_ERROR,
   payload: error
 })
@@ -76,9 +76,9 @@ export const singlePostFetchSaga = function* () {
 
     const post = yield call(getSinglePost, postId)
 
-    yield put(singlePostFetched(post))
+    yield put(postFetchSuccess(post))
   } catch (error) {
-    yield put(singlePostFetchError(error.message))
+    yield put(postFetchError(error.message))
   }
 }
 

@@ -33,8 +33,8 @@ export default function usersReducer(state = initialState, action) {
 
 // Actions
 
-export const usersFetch = () => ({ type: USERS_FETCH_REQUEST })
-export const usersFetched = (users) => ({
+export const usersFetchRequest = () => ({ type: USERS_FETCH_REQUEST })
+export const usersFetchSuccess = (users) => ({
   type: USERS_FETCH_SUCCES,
   payload: users
 })
@@ -65,7 +65,7 @@ const getUsers = async () => {
 export const usersFetchSaga = function* () {
   try {
     const users = yield call(getUsers)
-    yield put(usersFetched(users))
+    yield put(usersFetchSuccess(users))
   } catch (error) {
     yield put(usersFetchError(error.message))
   }

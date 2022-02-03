@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PostCard from '../../common/components/PostCard'
 import {
-  postsFetch,
+  postsFetchRequest,
   selectPostsMemo,
   selectPostsError,
   selectPostsLoad
@@ -34,7 +34,7 @@ const PostsPage = () => {
   const backLinkStyle = useStyle()
 
   useEffect(() => {
-    dispatch(postsFetch(userId))
+    dispatch(postsFetchRequest(userId))
   }, [])
 
   if (error) {
