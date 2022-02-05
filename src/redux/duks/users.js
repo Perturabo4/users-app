@@ -2,12 +2,12 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../api'
+import { baseUrlPath } from '../../config'
 
 // ALL USERS TYPES
 
-export const USERS_FETCH = 'USERS_FETCH'
-export const USERS_FETCHED = 'USERS_FETCHED'
+export const USERS_FETCH_REQUEST = 'USERS_FETCH_REQUEST'
+export const USERS_FETCH_SUCCES = 'USERS_FETCH_SUCCES'
 export const USERS_FETCH_ERROR = 'USERS_FETCH_ERROR'
 
 // Reducer
@@ -20,9 +20,9 @@ const initialState = fromJS({
 
 export default function usersReducer(state = initialState, action) {
   switch (action.type) {
-    case USERS_FETCH:
+    case USERS_FETCH_REQUEST:
       return state.set('load', true)
-    case USERS_FETCHED:
+    case USERS_FETCH_SUCCES:
       return state.set('load', false).set('users', fromJS(action.payload))
     case USERS_FETCH_ERROR:
       return state.set('load', false).set('error', action.payload)
@@ -33,16 +33,11 @@ export default function usersReducer(state = initialState, action) {
 
 // Actions
 
-<<<<<<< HEAD:src/duks/usersPage/users.js
 export const usersFetchRequest = () => ({ type: USERS_FETCH_REQUEST })
 export const usersFetchSuccess = (users) => ({
   type: USERS_FETCH_SUCCES,
   payload: users
 })
-=======
-export const usersFetch = () => ({ type: USERS_FETCH })
-export const usersFetched = (users) => ({ type: USERS_FETCHED, payload: users })
->>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/users.js
 export const usersFetchError = (error) => ({
   type: USERS_FETCH_ERROR,
   payload: error
@@ -67,7 +62,7 @@ const getUsers = async () => {
 
 // Sagas
 
-export const handleUsersFetch = function* () {
+export const handleUsersSaga = function* () {
   try {
     const users = yield call(getUsers)
     yield put(usersFetchSuccess(users))
@@ -76,15 +71,6 @@ export const handleUsersFetch = function* () {
   }
 }
 
-<<<<<<< HEAD:src/duks/usersPage/users.js
 export const watchUsersFetchSaga = function* () {
-<<<<<<< HEAD:src/duks/usersPage/users.js
-  yield takeEvery(USERS_FETCH_REQUEST, usersFetchSaga)
-=======
-export const watchUsersFetch = function* () {
-  yield takeEvery(USERS_FETCH, handleUsersFetch)
->>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/users.js
-=======
-  yield takeEvery(USERS_FETCH, usersFetchSaga)
->>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/users.js
+  yield takeEvery(USERS_FETCH_REQUEST, handleUsersSaga)
 }

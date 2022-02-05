@@ -2,13 +2,13 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../api'
+import { baseUrlPath } from '../../config'
 
 // Types
 
-export const POSTS_FETCH = 'POSTS_FETCH'
-export const POSTS_FETCHED = 'POSTS_FETCHED'
-export const POSTS_FETCH_ERROR = 'POSTS_FETCH_ERROR'
+export const POSTS_FETCH_REQUEST = 'pet-app/duks/POSTS_FETCH_REQUEST'
+export const POSTS_FETCH_SUCCESS = 'pet-app/duks/POSTS_FETCH_SUCCESS'
+export const POSTS_FETCH_ERROR = 'pet-app/duks/POSTS_FETCH_ERROR'
 
 // Reducer
 
@@ -21,9 +21,9 @@ const initialState = fromJS({
 
 export default function postsReducer(state = initialState, action) {
   switch (action.type) {
-    case POSTS_FETCH:
+    case POSTS_FETCH_REQUEST:
       return state.set('load', true).set('userId', action.payload)
-    case POSTS_FETCHED:
+    case POSTS_FETCH_SUCCESS:
       return state.set('load', false).set('posts', fromJS(action.payload))
     case POSTS_FETCH_ERROR:
       return state.set('load', false).set('error', action.payload)
@@ -34,7 +34,6 @@ export default function postsReducer(state = initialState, action) {
 
 // Actions
 
-<<<<<<< HEAD:src/duks/postsPage/posts.js
 export const postsFetchRequest = (userId) => ({
   type: POSTS_FETCH_REQUEST,
   payload: userId
@@ -43,10 +42,6 @@ export const postsFetchSuccess = (posts) => ({
   type: POSTS_FETCH_SUCCESS,
   payload: posts
 })
-=======
-export const postsFetch = (userId) => ({ type: POSTS_FETCH, payload: userId })
-export const postsFetched = (posts) => ({ type: POSTS_FETCHED, payload: posts })
->>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/posts.js
 export const postsFetchError = (error) => ({
   type: POSTS_FETCH_ERROR,
   payload: error
@@ -72,7 +67,7 @@ const getPosts = async (id) => {
 
 // Sagas
 
-export const handlePostsFetch = function* () {
+export const postsFetchSaga = function* () {
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getPosts, userId)
@@ -89,15 +84,6 @@ export const handlePostsFetch = function* () {
   }
 }
 
-<<<<<<< HEAD:src/duks/postsPage/posts.js
 export const watchPostsFetchSaga = function* () {
-<<<<<<< HEAD:src/duks/postsPage/posts.js
   yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
-=======
-export const watchPostsFetch = function* () {
-  yield takeEvery(POSTS_FETCH, handlePostsFetch)
->>>>>>> parent of f24dd3f (added 'Saga' ending to all saga names):src/redux/duks/posts.js
-=======
-  yield takeEvery(POSTS_FETCH, postsFetchSaga)
->>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/redux/duks/posts.js
 }

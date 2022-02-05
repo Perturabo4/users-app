@@ -2,7 +2,7 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../api'
+import { baseUrlPath } from '../../config'
 import { setSnackBar } from './snackBar'
 
 // CREATE USER TYPES
@@ -89,6 +89,6 @@ export const handleCreateNewUser = function* ({ payload }) {
   }
 }
 
-export const watchCreateUserRequest = function* () {
+export const watchCreateUserSaga = function* () {
   yield takeEvery(USER_CREATE_REQUEST, handleCreateNewUser)
 }

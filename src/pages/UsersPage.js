@@ -9,17 +9,10 @@ import {
   selectUsersMemo,
   selectUsersError,
   selectUsersLoad,
-<<<<<<< HEAD:src/duks/usersPage/UsersPage.js
   usersFetchRequest
-} from './users'
-import ErrorMessage from '../../common/components/ErrorMessage'
-import { LightTooltip } from '../../common/components/LightTooltip'
-=======
-  usersFetch
 } from '../redux/duks/users'
 import ErrorMessage from '../components/ErrorMessage'
 import { LightTooltip } from '../components/LightTooltip'
->>>>>>> parent of 3d15c1d (Changed project structure acording to redux style guide):src/pages/UsersPage.js
 import { useNavigate } from 'react-router-dom'
 
 const UsersPage = () => {
