@@ -54,7 +54,19 @@ const CreateUserPage = () => {
     })
   })
 
+  yup.addMethod(yup.date, 'checkIsBetween', function (msg) {
+    return this.test({
+      name: 'checkIsBetween',
+      message: msg || 'Date should be between "01-02-2022" and "10-02-2022"',
+      test: (value) => {
+        let newVal = moment(value).format('YYYY-MM-DD')
+        return moment(newVal).isBetween('2022-02-01', '2022-02-10')
+      }
+    })
+  })
+
   const schema = yup.object().shape({
+    datePicker: yup.date().checkIsBetween(),
     username: yup
       .string()
       .max(14, 'Field must be no longer than 14 chars')
@@ -81,24 +93,24 @@ const CreateUserPage = () => {
     reset,
     control
   } = useForm({
-    mode: 'onBlur'
-    // resolver: yupResolver(schema)
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
   })
 
   // Reset fields data after submit success
 
-  // useEffect(() => {
-  //   if (formState.isSubmitSuccessful) {
-  //     reset()
-  //   }
-  // }, [formState, reset])
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset()
+    }
+  }, [formState, reset])
 
   const load = useSelector(selectNewUserLoad)
 
   const onSubmit = (data) => {
     console.log('submit')
     Object.keys(data).forEach((key) => (data[key] = data[key].trim()))
-    dispatch(userCreateRequest(data))
+    // dispatch(userCreateRequest(data))
     data.datePicker = moment(data.datePicker).format('DD.MM.YYYY')
     console.log(data)
   }
@@ -113,8 +125,10 @@ const CreateUserPage = () => {
           control={control}
           name='datePicker'
           label='Select date'
+          error={!!errors.datePicker}
+          helperText={errors.datePicker?.message}
         />
-        {/* <Input
+        <Input
           label='User name'
           {...register('username')}
           error={!!errors.username}
@@ -137,7 +151,7 @@ const CreateUserPage = () => {
           {...register('phone')}
           error={!!errors.phone}
           helperText={errors.phone?.message}
-        /> */}
+        />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>
             <PrimaryButton
