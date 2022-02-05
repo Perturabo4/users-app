@@ -7,9 +7,9 @@ import { baseUrlPath, ducksPath } from '../../config'
 // Types
 const duckName = 'posts'
 
-export const REQUEST = `${ducksPath}/${duckName}/REQUEST`
-export const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
-export const ERROR = `${ducksPath}/${duckName}/ERROR`
+const POSTS_FETCH_REQUEST = `${ducksPath}/${duckName}/POSTS_FETCH_REQUEST`
+const POSTS_FETCH_SUCCESS = `${ducksPath}/${duckName}/POSTS_FETCH_SUCCESS`
+const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 
 // Reducer
 
@@ -22,11 +22,11 @@ const initialState = fromJS({
 
 export default function postsReducer(state = initialState, action) {
   switch (action.type) {
-    case REQUEST:
+    case POSTS_FETCH_REQUEST:
       return state.set('load', true).set('userId', action.payload)
-    case SUCCESS:
+    case POSTS_FETCH_SUCCESS:
       return state.set('load', false).set('posts', fromJS(action.payload))
-    case ERROR:
+    case POSTS_FETCH_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -36,15 +36,15 @@ export default function postsReducer(state = initialState, action) {
 // Actions
 
 export const postsFetchRequest = (userId) => ({
-  type: REQUEST,
+  type: POSTS_FETCH_REQUEST,
   payload: userId
 })
 export const postsFetchSuccess = (posts) => ({
-  type: SUCCESS,
+  type: POSTS_FETCH_SUCCESS,
   payload: posts
 })
 export const postsFetchError = (error) => ({
-  type: ERROR,
+  type: POSTS_FETCH_ERROR,
   payload: error
 })
 
@@ -86,5 +86,5 @@ export const postsFetchSaga = function* () {
 }
 
 export const watchPostsFetchSaga = function* () {
-  yield takeEvery(REQUEST, postsFetchSaga)
+  yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
 }

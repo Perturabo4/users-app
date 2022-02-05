@@ -6,9 +6,9 @@ import { baseUrlPath, ducksPath } from '../../config'
 
 // Types
 const duckName = 'singlePost'
-export const REQUEST = `${ducksPath}/${duckName}/REQUEST`
-export const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
-export const ERROR = `${ducksPath}/${duckName}/ERROR`
+const SINGLE_POST_REQUEST = `${ducksPath}/${duckName}/SINGLE_POST_REQUEST`
+const SINGLE_POST_SUCCESS = `${ducksPath}/${duckName}/SINGLE_POST_SUCCESS`
+const SINGLE_POST_ERROR = `${ducksPath}/${duckName}/SINGLE_POST_ERROR`
 
 // Reducer
 
@@ -21,11 +21,11 @@ const initialState = fromJS({
 
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
-    case REQUEST:
+    case SINGLE_POST_REQUEST:
       return state.set('load', true).set('postId', action.payload)
-    case SUCCESS:
+    case SINGLE_POST_SUCCESS:
       return state.set('load', false).set('post', fromJS(action.payload))
-    case ERROR:
+    case SINGLE_POST_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -35,15 +35,15 @@ export default function singlePostReducer(state = initialState, action) {
 // Actions
 
 export const postFetchRequest = (userId) => ({
-  type: ERROR,
+  type: SINGLE_POST_REQUEST,
   payload: userId
 })
 export const postFetchSuccess = (post) => ({
-  type: SUCCESS,
+  type: SINGLE_POST_SUCCESS,
   payload: post
 })
 export const postFetchError = (error) => ({
-  type: ERROR,
+  type: SINGLE_POST_ERROR,
   payload: error
 })
 
@@ -86,5 +86,5 @@ export const handlePostFetchSaga = function* () {
 }
 
 export const watchPostFetchSaga = function* () {
-  yield takeEvery(ERROR, handlePostFetchSaga)
+  yield takeEvery(SINGLE_POST_REQUEST, handlePostFetchSaga)
 }

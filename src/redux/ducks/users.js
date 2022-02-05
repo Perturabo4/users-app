@@ -2,13 +2,13 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../config'
+import { baseUrlPath, ducksPath } from '../../config'
 
 // ALL USERS TYPES
-
-export const USERS_FETCH_REQUEST = 'USERS_FETCH_REQUEST'
-export const USERS_FETCH_SUCCES = 'USERS_FETCH_SUCCES'
-export const USERS_FETCH_ERROR = 'USERS_FETCH_ERROR'
+const duckName = 'users'
+const USERS_FETCH_REQUEST = `${ducksPath}/${duckName}/USERS_FETCH_REQUEST`
+const USERS_FETCH_SUCCES = `${ducksPath}/${duckName}/USERS_FETCH_SUCCES`
+const USERS_FETCH_ERROR = `${ducksPath}/${duckName}USERS_FETCH_ERROR`
 
 // Reducer
 

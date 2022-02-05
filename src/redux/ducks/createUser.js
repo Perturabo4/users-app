@@ -8,9 +8,9 @@ import { setSnackBar } from './snackBar'
 // CREATE USER TYPES
 const duckName = 'createUser'
 
-const REQUEST = `${ducksPath}/${duckName}/REQUEST`
-const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
-const ERROR = `${ducksPath}/${duckName}/ERROR`
+const CREATE_USER_REQUEST = `${ducksPath}/${duckName}/CREATE_USER_REQUEST`
+const CREATE_USER_SUCCESS = `${ducksPath}/${duckName}/CREATE_USER_SUCCESS`
+const CREATE_USER_ERROR = `${ducksPath}/${duckName}/CREATE_USER_ERROR`
 
 // Reducer
 
@@ -22,11 +22,11 @@ const initialState = fromJS({
 
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
-    case REQUEST:
+    case CREATE_USER_REQUEST:
       return state.set('load', false)
-    case SUCCESS:
+    case CREATE_USER_SUCCESS:
       return state.set('load', false).set('users', fromJS(action.payload))
-    case ERROR:
+    case CREATE_USER_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -36,15 +36,15 @@ export default function createUserReducer(state = initialState, action) {
 // Actions
 
 export const userCreateRequest = (user) => ({
-  type: REQUEST,
+  type: CREATE_USER_REQUEST,
   payload: user
 })
 export const userCreateSuccess = (user) => ({
-  type: SUCCESS,
+  type: CREATE_USER_SUCCESS,
   payload: user
 })
 export const userCreateError = (error) => ({
-  type: ERROR,
+  type: CREATE_USER_ERROR,
   payload: error
 })
 
@@ -91,5 +91,5 @@ export const handleCreateNewUser = function* ({ payload }) {
 }
 
 export const watchCreateUserSaga = function* () {
-  yield takeEvery(REQUEST, handleCreateNewUser)
+  yield takeEvery(CREATE_USER_REQUEST, handleCreateNewUser)
 }

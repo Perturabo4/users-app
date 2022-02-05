@@ -1,8 +1,10 @@
 // TYPES
 
 import { fromJS } from 'immutable'
+import { ducksPath } from '../../config'
 
-export const SET_SNACKBAR = 'SET_SNACKBAR'
+const duckName = 'snackBar'
+const SET_SNACKBAR = `${ducksPath}/${duckName}/SET_SNACKBAR`
 
 // Reducer
 
