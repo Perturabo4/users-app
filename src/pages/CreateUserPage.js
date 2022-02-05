@@ -6,10 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Box, Container, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { TextField } from '@mui/material'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
 import Loader from '../components/Loader'
+import DatePickerField from '../components/DatePicker'
+import moment from 'moment'
 
 const useStyle = makeStyles({
   container: {
@@ -75,28 +78,30 @@ const CreateUserPage = () => {
     handleSubmit,
     formState,
     formState: { errors },
-    reset
+    reset,
+    control
   } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema)
+    mode: 'onBlur'
+    // resolver: yupResolver(schema)
   })
 
   // Reset fields data after submit success
 
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset()
-    }
-  }, [formState, reset])
+  // useEffect(() => {
+  //   if (formState.isSubmitSuccessful) {
+  //     reset()
+  //   }
+  // }, [formState, reset])
 
   const load = useSelector(selectNewUserLoad)
 
   const onSubmit = (data) => {
+    console.log('submit')
     Object.keys(data).forEach((key) => (data[key] = data[key].trim()))
     dispatch(userCreateRequest(data))
+    data.datePicker = moment(data.datePicker).format('DD.MM.YYYY')
+    console.log(data)
   }
-
-  console.log('Create Users Page RENDER')
 
   return (
     <Container className={classes.container} maxWidth='xs'>
@@ -104,7 +109,12 @@ const CreateUserPage = () => {
         Create new user
       </Typography>
       <form sx={{ width: '100%' }} noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Input
+        <DatePickerField
+          control={control}
+          name='datePicker'
+          label='Select date'
+        />
+        {/* <Input
           label='User name'
           {...register('username')}
           error={!!errors.username}
@@ -127,7 +137,7 @@ const CreateUserPage = () => {
           {...register('phone')}
           error={!!errors.phone}
           helperText={errors.phone?.message}
-        />
+        /> */}
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>
             <PrimaryButton
