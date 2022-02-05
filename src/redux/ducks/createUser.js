@@ -2,14 +2,15 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../config'
+import { baseUrlPath, ducksPath } from '../../config'
 import { setSnackBar } from './snackBar'
 
 // CREATE USER TYPES
+const duckName = 'createUser'
 
-export const USER_CREATE_REQUEST = 'USER_CREATE_REQUEST'
-export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS'
-export const USER_CREATE_ERROR = 'USER_CREATE_ERROR'
+const REQUEST = `${ducksPath}/${duckName}/REQUEST`
+const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
+const ERROR = `${ducksPath}/${duckName}/ERROR`
 
 // Reducer
 
@@ -21,11 +22,11 @@ const initialState = fromJS({
 
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
-    case USER_CREATE_REQUEST:
+    case REQUEST:
       return state.set('load', false)
-    case USER_CREATE_SUCCESS:
+    case SUCCESS:
       return state.set('load', false).set('users', fromJS(action.payload))
-    case USER_CREATE_ERROR:
+    case ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -35,15 +36,15 @@ export default function createUserReducer(state = initialState, action) {
 // Actions
 
 export const userCreateRequest = (user) => ({
-  type: USER_CREATE_REQUEST,
+  type: REQUEST,
   payload: user
 })
 export const userCreateSuccess = (user) => ({
-  type: USER_CREATE_SUCCESS,
+  type: SUCCESS,
   payload: user
 })
 export const userCreateError = (error) => ({
-  type: USER_CREATE_ERROR,
+  type: ERROR,
   payload: error
 })
 
@@ -90,5 +91,5 @@ export const handleCreateNewUser = function* ({ payload }) {
 }
 
 export const watchCreateUserSaga = function* () {
-  yield takeEvery(USER_CREATE_REQUEST, handleCreateNewUser)
+  yield takeEvery(REQUEST, handleCreateNewUser)
 }

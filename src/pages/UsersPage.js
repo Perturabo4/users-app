@@ -10,7 +10,7 @@ import {
   selectUsersError,
   selectUsersLoad,
   usersFetchRequest
-} from '../redux/duks/users'
+} from '../redux/ducks/users'
 import ErrorMessage from '../components/ErrorMessage'
 import { LightTooltip } from '../components/LightTooltip'
 import { useNavigate } from 'react-router-dom'

@@ -2,13 +2,13 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../config'
+import { baseUrlPath, ducksPath } from '../../config'
 
 // Types
-
-export const POST_FETCH_REQUEST = 'SINGLE_POST_FETCH'
-export const POST_FETCH_SUCCESS = 'SINGLE_POST_FETCHED'
-export const POST_FETCH_ERROR = 'SINGLE_POST_FETCH_ERROR'
+const duckName = 'singlePost'
+export const REQUEST = `${ducksPath}/${duckName}/REQUEST`
+export const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
+export const ERROR = `${ducksPath}/${duckName}/ERROR`
 
 // Reducer
 
@@ -21,11 +21,11 @@ const initialState = fromJS({
 
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
-    case POST_FETCH_REQUEST:
+    case REQUEST:
       return state.set('load', true).set('postId', action.payload)
-    case POST_FETCH_SUCCESS:
+    case SUCCESS:
       return state.set('load', false).set('post', fromJS(action.payload))
-    case POST_FETCH_ERROR:
+    case ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -35,15 +35,15 @@ export default function singlePostReducer(state = initialState, action) {
 // Actions
 
 export const postFetchRequest = (userId) => ({
-  type: POST_FETCH_REQUEST,
+  type: ERROR,
   payload: userId
 })
 export const postFetchSuccess = (post) => ({
-  type: POST_FETCH_SUCCESS,
+  type: SUCCESS,
   payload: post
 })
 export const postFetchError = (error) => ({
-  type: POST_FETCH_ERROR,
+  type: ERROR,
   payload: error
 })
 
@@ -86,5 +86,5 @@ export const handlePostFetchSaga = function* () {
 }
 
 export const watchPostFetchSaga = function* () {
-  yield takeEvery(POST_FETCH_REQUEST, handlePostFetchSaga)
+  yield takeEvery(ERROR, handlePostFetchSaga)
 }

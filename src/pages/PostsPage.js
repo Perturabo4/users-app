@@ -9,7 +9,7 @@ import {
   selectPostsMemo,
   selectPostsError,
   selectPostsLoad
-} from '../redux/duks/posts'
+} from '../redux/ducks/posts'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
 import Loader from '../components/Loader'

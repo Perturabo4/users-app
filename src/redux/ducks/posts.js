@@ -2,13 +2,14 @@ import axios from 'axios'
 import { fromJS } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
-import { baseUrlPath } from '../../config'
+import { baseUrlPath, ducksPath } from '../../config'
 
 // Types
+const duckName = 'posts'
 
-export const POSTS_FETCH_REQUEST = 'pet-app/duks/POSTS_FETCH_REQUEST'
-export const POSTS_FETCH_SUCCESS = 'pet-app/duks/POSTS_FETCH_SUCCESS'
-export const POSTS_FETCH_ERROR = 'pet-app/duks/POSTS_FETCH_ERROR'
+export const REQUEST = `${ducksPath}/${duckName}/REQUEST`
+export const SUCCESS = `${ducksPath}/${duckName}/SUCCESS`
+export const ERROR = `${ducksPath}/${duckName}/ERROR`
 
 // Reducer
 
@@ -21,11 +22,11 @@ const initialState = fromJS({
 
 export default function postsReducer(state = initialState, action) {
   switch (action.type) {
-    case POSTS_FETCH_REQUEST:
+    case REQUEST:
       return state.set('load', true).set('userId', action.payload)
-    case POSTS_FETCH_SUCCESS:
+    case SUCCESS:
       return state.set('load', false).set('posts', fromJS(action.payload))
-    case POSTS_FETCH_ERROR:
+    case ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
       return state
@@ -35,15 +36,15 @@ export default function postsReducer(state = initialState, action) {
 // Actions
 
 export const postsFetchRequest = (userId) => ({
-  type: POSTS_FETCH_REQUEST,
+  type: REQUEST,
   payload: userId
 })
 export const postsFetchSuccess = (posts) => ({
-  type: POSTS_FETCH_SUCCESS,
+  type: SUCCESS,
   payload: posts
 })
 export const postsFetchError = (error) => ({
-  type: POSTS_FETCH_ERROR,
+  type: ERROR,
   payload: error
 })
 
@@ -85,5 +86,5 @@ export const postsFetchSaga = function* () {
 }
 
 export const watchPostsFetchSaga = function* () {
-  yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
+  yield takeEvery(REQUEST, postsFetchSaga)
 }
