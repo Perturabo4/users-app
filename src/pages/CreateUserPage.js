@@ -204,7 +204,9 @@ const CreateUserPage = () => {
             </PrimaryButton>
           </Box>
           <Box>
-            <PrimaryButton onClick={() => navigate('/')}>Cancel</PrimaryButton>
+            <PrimaryButton onClick={() => navigate('/all-users')}>
+              Cancel
+            </PrimaryButton>
           </Box>
         </Box>
       </form>
