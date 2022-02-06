@@ -59,9 +59,12 @@ export const selectNewUserMemo = createSelector(selectNewUser, (user) =>
 )
 
 // Requests
-
+let idle = false
 const createNewUserRequest = async (obj) => {
+  if (idle) return
+  idle = true
   const response = await axios.post(`${baseUrlPath}/users`, obj)
+  idle = false
   return response.data
 }
 

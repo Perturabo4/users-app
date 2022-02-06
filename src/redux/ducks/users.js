@@ -61,13 +61,17 @@ const getUsers = async () => {
 }
 
 // Sagas
-
+let idle = false
 export const handleUsersSaga = function* () {
+  if (idle) return
+  idle = true
   try {
     const users = yield call(getUsers)
     yield put(usersFetchSuccess(users))
   } catch (error) {
     yield put(usersFetchError(error.message))
+  } finally {
+    idle = false
   }
 }
 

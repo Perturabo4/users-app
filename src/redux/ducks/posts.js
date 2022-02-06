@@ -67,8 +67,10 @@ const getPosts = async (id) => {
 }
 
 // Sagas
-
+let idle = false
 export const postsFetchSaga = function* () {
+  if (idle) return
+  idle = true
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getPosts, userId)
@@ -82,6 +84,8 @@ export const postsFetchSaga = function* () {
     yield put(postsFetchSuccess(cropedPosts))
   } catch (error) {
     yield put(postsFetchError(error.message))
+  } finally {
+    idle = false
   }
 }
 

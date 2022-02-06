@@ -72,8 +72,9 @@ const getSinglePost = async (id) => {
 }
 
 // Sagas
-
+let idle = false
 export const handlePostFetchSaga = function* () {
+  if (idle) return
   try {
     const postId = yield select(selectSinglePostId)
 
@@ -82,6 +83,8 @@ export const handlePostFetchSaga = function* () {
     yield put(postFetchSuccess(post))
   } catch (error) {
     yield put(postFetchError(error.message))
+  } finally {
+    idle = true
   }
 }
 
