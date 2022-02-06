@@ -21,8 +21,8 @@ export default function DatePickerField({
           return (
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                inputFormat='dd.MM.yyyy'
-                mask='__.__.____'
+                inputFormat={inputFormat || 'dd.MM.yyyy'}
+                mask={mask || '__.__.____'}
                 onChange={onChange}
                 value={value}
                 renderInput={(params) => <TextField {...params} {...rest} />}
