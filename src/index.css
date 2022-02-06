@@ -2,11 +2,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+
   height: 100%;
-  background: lightcyan;
 }
 
 #root {
   min-height: 100%;
-  padding-bottom: 30px;
 }

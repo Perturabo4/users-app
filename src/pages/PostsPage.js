@@ -55,7 +55,7 @@ const PostsPage = () => {
         {`Posts of ${userName}`}
       </Typography>
       <Box mb={'10px'}>
-        <Link to='/' className={backLinkStyle.link}>
+        <Link to='/all-users' className={backLinkStyle.link}>
           <ArrowBackIcon />
           Back to users page
         </Link>

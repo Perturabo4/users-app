@@ -122,7 +122,11 @@ const CreateUserPage = () => {
 
   return (
     <Container className={classes.container} maxWidth='xs'>
-      <Typography variant='h4' component='h1' sx={{ textAlign: 'center' }}>
+      <Typography
+        variant='h4'
+        component='h1'
+        sx={{ textAlign: 'center', margin: '20px 0' }}
+      >
         Create new user
       </Typography>
       <form sx={{ width: '100%' }} noValidate onSubmit={handleSubmit(onSubmit)}>

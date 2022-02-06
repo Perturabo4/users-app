@@ -1,6 +1,5 @@
-import { Container, Fab, Grid, Typography } from '@mui/material'
+import { Container, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import AddIcon from '@mui/icons-material/Add'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
@@ -12,12 +11,9 @@ import {
   usersFetchRequest
 } from '../redux/ducks/users'
 import ErrorMessage from '../components/ErrorMessage'
-import { LightTooltip } from '../components/LightTooltip'
-import { useNavigate } from 'react-router-dom'
 
 const UsersPage = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(usersFetchRequest())
@@ -44,16 +40,6 @@ const UsersPage = () => {
     <Loader />
   ) : (
     <Container>
-      <Fab
-        color='primary'
-        aria-label='add'
-        sx={{ position: 'absolute', top: '20px', right: '20px' }}
-        onClick={() => navigate('/create-user')}
-      >
-        <LightTooltip title='Add new User'>
-          <AddIcon />
-        </LightTooltip>
-      </Fab>
       <Typography variant='h2' component='h1' className={styles.root}>
         All users
       </Typography>
