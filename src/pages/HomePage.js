@@ -4,12 +4,10 @@ import Drawer from '@mui/material/Drawer'
 import CssBaseline from '@mui/material/CssBaseline'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import ListItem from '@mui/material/ListItem'
 import { NavLink, Outlet } from 'react-router-dom'
-import { ListItemText } from '@mui/material'
+import NavLinkStyled from '../components/NavLinkStyled'
 
 const drawerWidth = 240
 
@@ -41,34 +39,12 @@ export default function HomePage() {
       >
         <Toolbar />
         <Divider />
-        <List>
-          <ListItem button>
-            <NavLink
-              to={'/all-users'}
-              style={{
-                textDecoration: 'none',
-                display: 'flex',
-                width: '100%',
-                height: '100%'
-              }}
-            >
-              <ListItemText primary={'Users'} />
-            </NavLink>
-          </ListItem>
-          <ListItem button>
-            <NavLink
-              to={'/create-user'}
-              style={{
-                textDecoration: 'none',
-                display: 'flex',
-                width: '100%',
-                height: '100%'
-              }}
-            >
-              <ListItemText primary={'Create user'} />
-            </NavLink>
-          </ListItem>
-        </List>
+        <Box>
+          <NavLinkStyled to={'/all-users'}>Users</NavLinkStyled>
+          <Divider />
+          <NavLinkStyled to={'/create-user'}>Create user</NavLinkStyled>
+          <Divider />
+        </Box>
       </Drawer>
       <Box
         component='main'
