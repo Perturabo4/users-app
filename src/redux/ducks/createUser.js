@@ -25,7 +25,7 @@ export default function createUserReducer(state = initialState, action) {
     case CREATE_USER_REQUEST:
       return state.set('load', false)
     case CREATE_USER_SUCCESS:
-      return state.set('load', false).set('users', fromJS(action.payload))
+      return state.set('load', false).set('user', fromJS(action.payload))
     case CREATE_USER_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:

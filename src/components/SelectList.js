@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { Controller } from 'react-hook-form'
+import { FormHelperText } from '@mui/material'
 
 export default function SelectList({
   control,
@@ -11,7 +12,10 @@ export default function SelectList({
   label,
   options,
   fullWidth,
+  helperText,
+  error,
   size,
+  sx,
   ...restProps
 }) {
   return (
@@ -19,7 +23,7 @@ export default function SelectList({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormControl fullWidth={fullWidth} size={size}>
+        <FormControl fullWidth={fullWidth} size={size} error={error} sx={sx}>
           <InputLabel>{label}</InputLabel>
           <Select label={label} {...field} {...restProps}>
             {options.map((option) => (
@@ -28,6 +32,7 @@ export default function SelectList({
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       )}
     />

@@ -84,6 +84,7 @@ const CreateUserPage = () => {
       .string()
       .email('Email has incorrect format!')
       .required('Field is required!'),
+    age: yup.string().required('Field is required!'),
     phone: yup.string().checkPhoneFormat('Incorrect data passed!')
   })
 
@@ -178,13 +179,14 @@ const CreateUserPage = () => {
           fullWidth={true}
           sx={{ marginBottom: '20px' }}
           size='small'
-          variant='outlined'
           options={[
             { value: '20-25' },
             { value: '25-30' },
             { value: '30-40' },
             { value: '40+' }
           ]}
+          error={!!errors.age}
+          helperText={errors.age?.message}
         />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>
