@@ -6,13 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Box, Container, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { TextField } from '@mui/material'
+import moment from 'moment'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
 import Loader from '../components/Loader'
-import DatePickerField from '../components/DatePicker'
-import moment from 'moment'
+import DatePickerField from '../components/DatePickerField'
+import SelectList from '../components/SelectList'
 
 const useStyle = makeStyles({
   container: {
@@ -34,7 +34,7 @@ const CreateUserPage = () => {
   const dispatch = useDispatch()
   const classes = useStyle()
 
-  // Custom yup validation
+  // Custom yup validation methods
 
   yup.addMethod(yup.string, 'checkPhoneFormat', function (msg) {
     const regExpPhoneNumber =
@@ -65,6 +65,8 @@ const CreateUserPage = () => {
     })
   })
 
+  // Yup schema
+
   const schema = yup.object().shape({
     datePicker: yup.date().checkIsBetween(),
     username: yup
@@ -94,13 +96,13 @@ const CreateUserPage = () => {
     control
   } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: { age: '' }
   })
-
-  // Reset fields data after submit success
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
+      // Reset fields data after submit success
       reset()
     }
   }, [formState, reset])
@@ -108,11 +110,13 @@ const CreateUserPage = () => {
   const load = useSelector(selectNewUserLoad)
 
   const onSubmit = (data) => {
-    console.log('submit')
-    Object.keys(data).forEach((key) => (data[key] = data[key].trim()))
-    // dispatch(userCreateRequest(data))
+    Object.keys(data).forEach((key) => {
+      if (typeof data[key] === 'string') {
+        data[key] = data[key].trim()
+      }
+    })
     data.datePicker = moment(data.datePicker).format('DD.MM.YYYY')
-    console.log(data)
+    dispatch(userCreateRequest(data))
   }
 
   return (
@@ -122,35 +126,65 @@ const CreateUserPage = () => {
       </Typography>
       <form sx={{ width: '100%' }} noValidate onSubmit={handleSubmit(onSubmit)}>
         <DatePickerField
+          sx={{ marginBottom: '20px' }}
           control={control}
           name='datePicker'
           label='Select date'
           error={!!errors.datePicker}
           helperText={errors.datePicker?.message}
+          size='small'
+          fullWidth
         />
         <Input
+          sx={{ marginBottom: '20px' }}
+          fullWidth
+          size='small'
           label='User name'
           {...register('username')}
           error={!!errors.username}
           helperText={errors.username?.message}
         />
         <Input
+          sx={{ marginBottom: '20px' }}
+          fullWidth
+          size='small'
           label='Full name'
           {...register('name')}
           error={!!errors.name}
           helperText={errors.name?.message}
         />
         <Input
+          sx={{ marginBottom: '20px' }}
+          fullWidth
+          size='small'
           label='Email'
           {...register('email')}
           error={!!errors.email}
           helperText={errors.email?.message}
         />
         <Input
+          sx={{ marginBottom: '20px' }}
+          fullWidth
+          size='small'
           label='Phone number'
           {...register('phone')}
           error={!!errors.phone}
           helperText={errors.phone?.message}
+        />
+        <SelectList
+          control={control}
+          name='age'
+          label='Age'
+          fullWidth={true}
+          sx={{ marginBottom: '20px' }}
+          size='small'
+          variant='outlined'
+          options={[
+            { value: '20-25' },
+            { value: '25-30' },
+            { value: '30-40' },
+            { value: '40+' }
+          ]}
         />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>
