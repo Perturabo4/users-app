@@ -50,27 +50,31 @@ export const userCreateError = (error) => ({
 
 // Selectors
 
-export const selectNewUser = (state) => state.getIn(['newUser', 'user'])
-export const selectNewUserLoad = (state) => state.getIn(['newUser', 'load'])
-export const selectNewUserError = (state) => state.getIn(['newUser', 'error'])
+const selectUser = (state) => state.get('newUser')
 
-export const selectNewUserMemo = createSelector(selectNewUser, (user) =>
-  user.toJS()
+export const selectNewUser = createSelector(selectUser, (newUser) =>
+  newUser.get('user').toJS()
+)
+export const selectNewUserLoad = createSelector(selectUser, (newUser) =>
+  newUser.get('load')
+)
+export const selectNewUserError = createSelector(selectUser, (newUser) =>
+  newUser.get('error')
 )
 
 // Requests
-let idle = false
+
 const createNewUserRequest = async (obj) => {
-  if (idle) return
-  idle = true
   const response = await axios.post(`${baseUrlPath}/users`, obj)
-  idle = false
+
   return response.data
 }
 
 // Sagas
-
-export const handleCreateNewUser = function* ({ payload }) {
+let idle = false
+export const handleCreateNewUserSaga = function* ({ payload }) {
+  if (idle) return
+  idle = true
   try {
     const user = yield call(createNewUserRequest, payload)
     yield put(userCreateSuccess(user))
@@ -90,9 +94,11 @@ export const handleCreateNewUser = function* ({ payload }) {
         type: 'error'
       })
     )
+  } finally {
+    idle = false
   }
 }
 
 export const watchCreateUserSaga = function* () {
-  yield takeEvery(CREATE_USER_REQUEST, handleCreateNewUser)
+  yield takeEvery(CREATE_USER_REQUEST, handleCreateNewUserSaga)
 }

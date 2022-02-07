@@ -48,20 +48,19 @@ export const postFetchError = (error) => ({
 })
 
 // Selectors
+const selectPost = (state) => state.get('singlePost')
 
-export const selectSinglePost = (state) => state.getIn(['singlePost', 'post'])
-
-export const selectSinglePostError = (state) =>
-  state.getIn(['singlePost', 'error'])
-
-export const selectSinglePostLoad = (state) =>
-  state.getIn(['singlePost', 'load'])
-
-export const selectSinglePostId = (state) =>
-  state.getIn(['singlePost', 'postId'])
-
-export const selectSinglePostMemo = createSelector(selectSinglePost, (post) =>
-  post.toJS()
+export const selectSinglePost = createSelector(selectPost, (state) =>
+  state.get('post').toJS()
+)
+export const selectSinglePostError = createSelector(selectPost, (state) =>
+  state.get('error')
+)
+export const selectSinglePostLoad = createSelector(selectPost, (state) =>
+  state.get('load')
+)
+export const selectSinglePostId = createSelector(selectPost, (state) =>
+  state.get('postId')
 )
 
 // Requests

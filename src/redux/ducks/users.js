@@ -44,13 +44,16 @@ export const usersFetchError = (error) => ({
 })
 
 // Selectors
+export const selectUsers = (state) => state.get('allUsers')
 
-export const selectUsers = (state) => state.getIn(['allUsers', 'users'])
-export const selectUsersLoad = (state) => state.getIn(['allUsers', 'load'])
-export const selectUsersError = (state) => state.getIn(['allUsers', 'error'])
-
-export const selectUsersMemo = createSelector(selectUsers, (users) =>
-  users.toJS()
+export const selectUsersMemo = createSelector(selectUsers, (allUsers) =>
+  allUsers.get('users').toJS()
+)
+export const selectUsersLoad = createSelector(selectUsers, (allUsers) =>
+  allUsers.get('load')
+)
+export const selectUsersError = createSelector(selectUsers, (allUsers) =>
+  allUsers.get('error')
 )
 
 // Requests

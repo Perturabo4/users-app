@@ -50,13 +50,19 @@ export const postsFetchError = (error) => ({
 
 // Selectors
 
-export const selectPosts = (state) => state.getIn(['userPosts', 'posts'])
-export const selectPostsLoad = (state) => state.getIn(['userPosts', 'load'])
-export const selectPostsError = (state) => state.getIn(['userPosts', 'error'])
-export const selectPostsUserId = (state) => state.getIn(['userPosts', 'userId'])
+export const selectPosts = (state) => state.get('userPosts')
 
-export const selectPostsMemo = createSelector(selectPosts, (posts) =>
-  posts.toJS()
+export const selectPostsMemo = createSelector(selectPosts, (userPosts) =>
+  userPosts.get('posts').toJS()
+)
+export const selectPostsLoad = createSelector(selectPosts, (userPosts) =>
+  userPosts.get('load')
+)
+export const selectPostsError = createSelector(selectPosts, (userPosts) =>
+  userPosts.get('error')
+)
+export const selectPostsUserId = createSelector(selectPosts, (userPosts) =>
+  userPosts.get('userId')
 )
 
 // Requests
@@ -71,6 +77,7 @@ let idle = false
 export const postsFetchSaga = function* () {
   if (idle) return
   idle = true
+
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getPosts, userId)
