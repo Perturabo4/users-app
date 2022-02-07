@@ -6,7 +6,7 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import NavLinkStyled from '../components/NavLinkStyled'
 
 const drawerWidth = 240
@@ -40,9 +40,11 @@ export default function HomePage() {
         <Toolbar />
         <Divider />
         <Box>
-          <NavLinkStyled to={'/all-users'}>Users</NavLinkStyled>
+          <NavLinkStyled to={'/'}>Home</NavLinkStyled>
           <Divider />
           <NavLinkStyled to={'/create-user'}>Create user</NavLinkStyled>
+          <Divider />
+          <NavLinkStyled to={'/all-users'}>Users</NavLinkStyled>
           <Divider />
         </Box>
       </Drawer>
