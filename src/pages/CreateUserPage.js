@@ -6,7 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Box, Container, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import moment from 'moment'
+import { add, format, isWithinInterval } from 'date-fns'
+
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
@@ -55,12 +56,22 @@ const CreateUserPage = () => {
   })
 
   yup.addMethod(yup.date, 'checkIsBetween', function (msg) {
+    // check date shoud be between today and 7 days from today
+    const currentDate = new Date()
+    const endDate = add(currentDate, { days: 7 })
+    const errorTxt = `Date should be between ${format(
+      currentDate,
+      'dd.MM.yyyy'
+    )} and ${format(endDate, 'dd.MM.yyyy')}`
+
     return this.test({
       name: 'checkIsBetween',
-      message: msg || 'Date should be between "01-02-2022" and "10-02-2022"',
+      message: msg || errorTxt,
       test: (value) => {
-        let newVal = moment(value).format('YYYY-MM-DD')
-        return moment(newVal).isBetween('2022-02-01', '2022-02-10')
+        return isWithinInterval(value, {
+          start: currentDate,
+          end: endDate
+        })
       }
     })
   })
@@ -116,7 +127,7 @@ const CreateUserPage = () => {
         data[key] = data[key].trim()
       }
     })
-    data.datePicker = moment(data.datePicker).format('DD.MM.YYYY')
+    data.datePicker = format(data.datePicker, 'DD.MM.YYYY')
     dispatch(userCreateRequest(data))
   }
 
