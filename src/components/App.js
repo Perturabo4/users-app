@@ -16,10 +16,10 @@ const App = () => {
       <Routes>
         <Route path='/' element={<HomePage />}>
           <Route index element={<HomePageText />} />
+          <Route path='all-users' element={<UsersPage />} />
           <Route path='posts/:userId/:userName' element={<PostsPage />} />
           <Route path='single-post/:postId' element={<SinglePostPage />} />
           <Route path='create-user' element={<CreateUserPage />} />
-          <Route path='all-users' element={<UsersPage />} />
           <Route path='*' element={<Navigate to={'/'} />} />
         </Route>
       </Routes>

@@ -14,6 +14,17 @@ import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
 import Loader from '../components/Loader'
 import DatePickerField from '../components/DatePickerField'
 import SelectList from '../components/SelectList'
+import AutocompleteField from '../components/AutocompleteField'
+
+const countries = [
+  { code: 'AD', label: 'Andorra', phone: '376' },
+  { code: 'AE', label: 'United Arab Emirates', phone: '971' },
+  { code: 'AF', label: 'Afghanistan', phone: '93' },
+  { code: 'AG', label: 'Antigua and Barbuda', phone: '1-268' },
+  { code: 'AI', label: 'Anguilla', phone: '1-264' },
+  { code: 'AL', label: 'Albania', phone: '355' },
+  { code: 'AM', label: 'Armenia', phone: '374' }
+]
 
 const useStyle = makeStyles({
   container: {
@@ -109,7 +120,7 @@ const CreateUserPage = () => {
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
-    defaultValues: { age: '' }
+    defaultValues: { age: '', autocomlete: null }
   })
 
   useEffect(() => {
@@ -127,7 +138,8 @@ const CreateUserPage = () => {
         data[key] = data[key].trim()
       }
     })
-    data.datePicker = format(data.datePicker, 'DD.MM.YYYY')
+    data.datePicker = format(data.datePicker, 'dd.MM.yyyy')
+    console.log(data)
     dispatch(userCreateRequest(data))
   }
 
@@ -202,6 +214,11 @@ const CreateUserPage = () => {
           ]}
           error={!!errors.age}
           helperText={errors.age?.message}
+        />
+        <AutocompleteField
+          control={control}
+          name={'autocomplete'}
+          options={countries}
         />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>
