@@ -84,7 +84,7 @@ export const handlePostFetchSaga = function* () {
   } catch (error) {
     yield put(postFetchError(error.message))
   } finally {
-    idle = true
+    idle = false
   }
 }
 
