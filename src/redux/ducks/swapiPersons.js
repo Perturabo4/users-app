@@ -19,13 +19,10 @@ const initialState = fromJS({
 export default function swapiReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PERSON_REQUEST:
-      //   return { ...state, load: true, name: action.payload };
       return state.set('name', action.payload)
     case FETCH_PERSON_SUCCESS:
-      //   return { ...state, load: false, persons: action.payload };
       return state.set('persons', fromJS(action.payload))
     case FETCH_PERSON_ERROR:
-      //   return { ...state, load: false, error: action.payload };
       return state.set('error', action.payload)
     default:
       return state
@@ -50,10 +47,8 @@ export const swapiFetchError = (error) => ({
 // Actions
 
 const fetchPersons = async (name) => {
-  console.log(name)
   const res = await fetch(`${baseSwapiUrlPath}/?search=${name}`)
   const persons = await res.json()
-  console.log(persons)
   return persons.results
 }
 
@@ -62,8 +57,6 @@ export const selectPersons = (state) => state.get('swapiPersons')
 export const selectPersonsMemo = createSelector(selectPersons, (swapi) =>
   swapi.get('persons').toJS()
 )
-
-// export const selectLoadPersons = (state) => state.swapi.load;
 
 // sagas
 let idle
