@@ -11,20 +11,14 @@ import { add, format, isWithinInterval } from 'date-fns'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
+import {
+  selectPersonsMemo,
+  swapiFetchRequest
+} from '../redux/ducks/swapiPersons'
 import Loader from '../components/Loader'
 import DatePickerField from '../components/DatePickerField'
 import SelectList from '../components/SelectList'
 import AutocompleteField from '../components/AutocompleteField'
-
-const countries = [
-  { code: 'AD', label: 'Andorra', phone: '376' },
-  { code: 'AE', label: 'United Arab Emirates', phone: '971' },
-  { code: 'AF', label: 'Afghanistan', phone: '93' },
-  { code: 'AG', label: 'Antigua and Barbuda', phone: '1-268' },
-  { code: 'AI', label: 'Anguilla', phone: '1-264' },
-  { code: 'AL', label: 'Albania', phone: '355' },
-  { code: 'AM', label: 'Armenia', phone: '374' }
-]
 
 const useStyle = makeStyles({
   container: {
@@ -120,7 +114,7 @@ const CreateUserPage = () => {
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
-    defaultValues: { age: '', autocomlete: null }
+    defaultValues: { age: '', autocomplete: null }
   })
 
   useEffect(() => {
@@ -218,7 +212,10 @@ const CreateUserPage = () => {
         <AutocompleteField
           control={control}
           name={'autocomplete'}
-          options={countries}
+          selector={selectPersonsMemo}
+          actionToGetOptions={swapiFetchRequest}
+          labelKey={'name'}
+          label={'Chose youre favorite STAR WARS person'}
         />
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box mr={2}>

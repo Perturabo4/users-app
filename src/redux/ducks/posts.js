@@ -73,6 +73,7 @@ const getPosts = async (id) => {
 }
 
 // Sagas
+
 let idle = false
 export const postsFetchSaga = function* () {
   if (idle) return

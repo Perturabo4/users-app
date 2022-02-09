@@ -11,6 +11,7 @@ import usersReducer, { watchUsersFetchSaga } from './ducks/users'
 import singlePostReducer, { watchPostFetchSaga } from './ducks/singlePost'
 import createUserReducer, { watchCreateUserSaga } from './ducks/createUser'
 import snackBarReducer from './ducks/snackBar'
+import swapiReduser, { watchPersonsSaga } from './ducks/swapiPersons'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
   userPosts: postsReducer,
   singlePost: singlePostReducer,
   newUser: createUserReducer,
-  snackBar: snackBarReducer
+  snackBar: snackBarReducer,
+  swapiPersons: swapiReduser
 })
 
 export const store = createStore(
@@ -45,7 +47,8 @@ function* rootSaga() {
     spawn(watchUsersFetchSaga),
     spawn(watchPostsFetchSaga),
     spawn(watchPostFetchSaga),
-    spawn(watchCreateUserSaga)
+    spawn(watchCreateUserSaga),
+    spawn(watchPersonsSaga)
   ])
 }
 
