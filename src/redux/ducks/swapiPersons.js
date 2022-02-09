@@ -11,6 +11,7 @@ const FETCH_PERSON_ERROR = `${ducksPath}/${duckName}/FETCH_PERSON_ERROR`
 
 // reducers
 const initialState = fromJS({
+  load: false,
   persons: [],
   error: null,
   name: ''
@@ -19,11 +20,11 @@ const initialState = fromJS({
 export default function swapiReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PERSON_REQUEST:
-      return state.set('name', action.payload)
+      return state.set('load', true).set('name', action.payload)
     case FETCH_PERSON_SUCCESS:
-      return state.set('persons', fromJS(action.payload))
+      return state.set('load', false).set('persons', fromJS(action.payload))
     case FETCH_PERSON_ERROR:
-      return state.set('error', action.payload)
+      return state.set('load', false).set('error', action.payload)
     default:
       return state
   }
@@ -56,6 +57,9 @@ const fetchPersons = async (name) => {
 export const selectPersons = (state) => state.get('swapiPersons')
 export const selectPersonsMemo = createSelector(selectPersons, (swapi) =>
   swapi.get('persons').toJS()
+)
+export const selectPersonsLoad = createSelector(selectPersons, (swapi) =>
+  swapi.get('load')
 )
 
 // sagas
