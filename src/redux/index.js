@@ -9,7 +9,9 @@ import { all, spawn } from 'redux-saga/effects'
 import postsReducer, { watchPostsFetchSaga } from './ducks/posts'
 import usersReducer, { watchUsersFetchSaga } from './ducks/users'
 import singlePostReducer, { watchPostFetchSaga } from './ducks/singlePost'
-import createUserReducer, { watchCreateUserSaga } from './ducks/createUser'
+import createUserReducer, {
+  watchCreateUserSaga
+} from './ducks/createUserReducer'
 import snackBarReducer from './ducks/snackBar'
 import swapiReduser, { watchPersonsSaga } from './ducks/swapiPersons'
 

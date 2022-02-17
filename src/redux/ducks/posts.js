@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fromJS } from 'immutable'
+import { fromJS, List, Record } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
@@ -13,10 +13,10 @@ const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 
 // Reducer
 
-const initialState = fromJS({
+const initialState = Record({
   userId: 1,
   load: false,
-  posts: [],
+  posts: fromJS([]),
   error: null
 })
 
@@ -52,17 +52,21 @@ export const postsFetchError = (error) => ({
 
 export const selectPosts = (state) => state.get('userPosts')
 
-export const selectPostsMemo = createSelector(selectPosts, (userPosts) =>
-  userPosts.get('posts').toJS()
+export const selectPostsMemo = createSelector(
+  selectPosts,
+  (userPosts) => userPosts['posts']
 )
-export const selectPostsLoad = createSelector(selectPosts, (userPosts) =>
-  userPosts.get('load')
+export const selectPostsLoad = createSelector(
+  selectPosts,
+  (userPosts) => userPosts['load']
 )
-export const selectPostsError = createSelector(selectPosts, (userPosts) =>
-  userPosts.get('error')
+export const selectPostsError = createSelector(
+  selectPosts,
+  (userPosts) => userPosts['error']
 )
-export const selectPostsUserId = createSelector(selectPosts, (userPosts) =>
-  userPosts.get('userId')
+export const selectPostsUserId = createSelector(
+  selectPosts,
+  (userPosts) => userPosts['userId']
 )
 
 // Requests

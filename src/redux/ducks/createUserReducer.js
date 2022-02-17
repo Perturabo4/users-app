@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { fromJS } from 'immutable'
+import { Map, Record } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
@@ -14,18 +14,18 @@ const CREATE_USER_ERROR = `${ducksPath}/${duckName}/CREATE_USER_ERROR`
 
 // Reducer
 
-const initialState = fromJS({
+const initialState = Record({
   load: false,
-  user: {},
+  user: Map({}),
   error: null
 })
 
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
     case CREATE_USER_REQUEST:
-      return state.set('load', false)
+      return state.set('load', true)
     case CREATE_USER_SUCCESS:
-      return state.set('load', false).set('user', fromJS(action.payload))
+      return state.set('load', false).set('user', Map(action.payload))
     case CREATE_USER_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
@@ -53,13 +53,15 @@ export const userCreateError = (error) => ({
 const selectUser = (state) => state.get('newUser')
 
 export const selectNewUser = createSelector(selectUser, (newUser) =>
-  newUser.get('user').toJS()
+  newUser['user'].toJS()
 )
-export const selectNewUserLoad = createSelector(selectUser, (newUser) =>
-  newUser.get('load')
+export const selectNewUserLoad = createSelector(
+  selectUser,
+  (newUser) => newUser['load']
 )
-export const selectNewUserError = createSelector(selectUser, (newUser) =>
-  newUser.get('error')
+export const selectNewUserError = createSelector(
+  selectUser,
+  (newUser) => newUser['error']
 )
 
 // Requests

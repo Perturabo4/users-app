@@ -10,7 +10,10 @@ import { add, format, isWithinInterval } from 'date-fns'
 
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
-import { selectNewUserLoad, userCreateRequest } from '../redux/ducks/createUser'
+import {
+  selectNewUserLoad,
+  userCreateRequest
+} from '../redux/ducks/createUserReducer'
 import {
   selectPersonsMemo,
   swapiFetchRequest
