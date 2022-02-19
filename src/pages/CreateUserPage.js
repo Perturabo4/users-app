@@ -17,7 +17,7 @@ import {
 import {
   selectPersonsMemo,
   swapiFetchRequest
-} from '../redux/ducks/swapiPersons'
+} from '../redux/ducks/swapiPersonsReducer'
 import Loader from '../components/Loader'
 import DatePickerField from '../components/DatePickerField'
 import SelectList from '../components/SelectList'

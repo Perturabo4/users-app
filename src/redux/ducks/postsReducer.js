@@ -13,12 +13,14 @@ const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 
 // Reducer
 
-const initialState = Record({
+const record = Record({
   userId: 1,
   load: false,
   posts: fromJS([]),
   error: null
 })
+
+const initialState = record()
 
 export default function postsReducer(state = initialState, action) {
   switch (action.type) {

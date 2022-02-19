@@ -9,7 +9,7 @@ import {
   selectUsersError,
   selectUsersLoad,
   usersFetchRequest
-} from '../redux/ducks/users'
+} from '../redux/ducks/usersReducer'
 import ErrorMessage from '../components/ErrorMessage'
 
 const UsersPage = () => {

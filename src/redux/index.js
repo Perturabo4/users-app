@@ -6,14 +6,16 @@ import { createBrowserHistory } from 'history'
 import createSagaMiddleware from '@redux-saga/core'
 import { all, spawn } from 'redux-saga/effects'
 
-import postsReducer, { watchPostsFetchSaga } from './ducks/posts'
-import usersReducer, { watchUsersFetchSaga } from './ducks/users'
-import singlePostReducer, { watchPostFetchSaga } from './ducks/singlePost'
+import postsReducer, { watchPostsFetchSaga } from './ducks/postsReducer'
+import usersReducer, { watchUsersFetchSaga } from './ducks/usersReducer'
+import singlePostReducer, {
+  watchPostFetchSaga
+} from './ducks/singlePostReducer'
 import createUserReducer, {
   watchCreateUserSaga
 } from './ducks/createUserReducer'
-import snackBarReducer from './ducks/snackBar'
-import swapiReduser, { watchPersonsSaga } from './ducks/swapiPersons'
+import snackBarReducer from './ducks/snackBarReducer'
+import swapiReduser, { watchPersonsSaga } from './ducks/swapiPersonsReducer'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({

@@ -10,7 +10,7 @@ import {
   selectSinglePostError,
   selectSinglePostLoad,
   postFetchRequest
-} from '../redux/ducks/singlePost'
+} from '../redux/ducks/singlePostReducer'
 import ErrorMessage from '../components/ErrorMessage'
 
 const SinglePostPage = () => {

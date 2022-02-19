@@ -2,7 +2,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import React from 'react'
 import { Controller } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectPersonsLoad } from '../redux/ducks/swapiPersons'
+import { selectPersonsLoad } from '../redux/ducks/swapiPersonsReducer'
 import Loader from './Loader'
 
 const AutocompleteField = ({

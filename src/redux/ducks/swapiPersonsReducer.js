@@ -17,7 +17,7 @@ const initialState = fromJS({
   name: ''
 })
 
-export default function swapiReducer(state = initialState, action) {
+export default function swapiPersonsReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PERSON_REQUEST:
       return state.set('load', true).set('name', action.payload)

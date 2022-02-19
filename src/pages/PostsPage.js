@@ -9,7 +9,7 @@ import {
   selectPostsMemo,
   selectPostsError,
   selectPostsLoad
-} from '../redux/ducks/posts'
+} from '../redux/ducks/postsReducer'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
 import Loader from '../components/Loader'
@@ -40,8 +40,6 @@ const PostsPage = () => {
   if (error) {
     return <ErrorMessage error={error} />
   }
-
-  console.log('Posts Page RENDER')
 
   return load ? (
     <Loader />

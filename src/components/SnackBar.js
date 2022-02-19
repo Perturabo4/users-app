@@ -6,7 +6,7 @@ import {
   selectOpen,
   selectType,
   setSnackBar
-} from '../redux/ducks/snackBar'
+} from '../redux/ducks/snackBarReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
