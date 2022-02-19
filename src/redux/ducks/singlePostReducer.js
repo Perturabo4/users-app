@@ -1,8 +1,8 @@
-import axios from 'axios'
-import { fromJS } from 'immutable'
+import { Map, Record } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
+import { getRequest } from '../../utils/requests'
 
 // Types
 const duckName = 'singlePost'
@@ -12,19 +12,21 @@ const SINGLE_POST_ERROR = `${ducksPath}/${duckName}/SINGLE_POST_ERROR`
 
 // Reducer
 
-const initialState = fromJS({
+const record = Record({
   postId: 1,
   load: false,
   post: {},
   error: null
 })
 
+const initialState = record()
+
 export default function singlePostReducer(state = initialState, action) {
   switch (action.type) {
     case SINGLE_POST_REQUEST:
       return state.set('load', true).set('postId', action.payload)
     case SINGLE_POST_SUCCESS:
-      return state.set('load', false).set('post', fromJS(action.payload))
+      return state.set('load', false).set('post', Map(action.payload))
     case SINGLE_POST_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
@@ -50,25 +52,22 @@ export const postFetchError = (error) => ({
 // Selectors
 const selectPost = (state) => state.get('singlePost')
 
-export const selectSinglePost = createSelector(selectPost, (state) =>
-  state.get('post').toJS()
+export const selectSinglePost = createSelector(
+  selectPost,
+  (state) => state['post']
 )
-export const selectSinglePostError = createSelector(selectPost, (state) =>
-  state.get('error')
+export const selectSinglePostError = createSelector(
+  selectPost,
+  (state) => state['error']
 )
-export const selectSinglePostLoad = createSelector(selectPost, (state) =>
-  state.get('load')
+export const selectSinglePostLoad = createSelector(
+  selectPost,
+  (state) => state['load']
 )
-export const selectSinglePostId = createSelector(selectPost, (state) =>
-  state.get('postId')
+export const selectSinglePostId = createSelector(
+  selectPost,
+  (state) => state['postId']
 )
-
-// Requests
-
-const getSinglePost = async (id) => {
-  const response = await axios.get(`${baseUrlPath}/posts/${id}`)
-  return response.data
-}
 
 // Sagas
 let idle = false
@@ -77,7 +76,7 @@ export const handlePostFetchSaga = function* () {
   try {
     const postId = yield select(selectSinglePostId)
 
-    const post = yield call(getSinglePost, postId)
+    const post = yield call(getRequest, `${baseUrlPath}/posts/${postId}`)
 
     yield put(postFetchSuccess(post))
   } catch (error) {

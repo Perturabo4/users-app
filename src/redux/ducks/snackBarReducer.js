@@ -1,6 +1,7 @@
 // TYPES
 
-import { fromJS } from 'immutable'
+import { Record } from 'immutable'
+import { createSelector } from 'reselect'
 import { ducksPath } from '../../config'
 
 const duckName = 'snackBar'
@@ -8,11 +9,13 @@ const SET_SNACKBAR = `${ducksPath}/${duckName}/SET_SNACKBAR`
 
 // Reducer
 
-const initialState = fromJS({
+const record = Record({
   open: false,
   type: 'success',
   message: ''
 })
+
+const initialState = record()
 
 export default function snackBarReducer(state = initialState, action) {
   switch (action.type) {
@@ -32,7 +35,17 @@ export const setSnackBar = (options) => ({
 })
 
 // Selectors
+const selectSnackBar = (state) => state.get('snackBar')
 
-export const selectOpen = (state) => state.getIn(['snackBar', 'open'])
-export const selectType = (state) => state.getIn(['snackBar', 'type'])
-export const selectMessage = (state) => state.getIn(['snackBar', 'message'])
+export const selectOpen = createSelector(
+  selectSnackBar,
+  (snackBar) => snackBar['open']
+)
+export const selectType = createSelector(
+  selectSnackBar,
+  (snackBar) => snackBar['type']
+)
+export const selectMessage = createSelector(
+  selectSnackBar,
+  (snackBar) => snackBar['message']
+)

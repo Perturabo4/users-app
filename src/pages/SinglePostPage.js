@@ -39,13 +39,13 @@ const SinglePostPage = () => {
           variant='h2'
           sx={{ textAlign: 'center', mb: '20px' }}
         >
-          {post.title}
+          {post.get('title')}
         </Typography>
         <Button onClick={() => navigate(-1)} variant='contained' size='small'>
           <ArrowBackIcon /> Go back
         </Button>
         <Typography component='div' variant='body1' sx={{ mt: '20px' }}>
-          {post.body}
+          {post.get('body')}
         </Typography>
       </Box>
     </Container>

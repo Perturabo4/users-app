@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { Map, Record } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
+import { postRequest } from '../../utils/requests'
 import { setSnackBar } from './snackBarReducer'
 
 // CREATE USER TYPES
@@ -66,21 +66,13 @@ export const selectNewUserError = createSelector(
   (newUser) => newUser['error']
 )
 
-// Requests
-
-const createNewUserRequest = async (obj) => {
-  const response = await axios.post(`${baseUrlPath}/users`, obj)
-
-  return response.data
-}
-
 // Sagas
 let idle = false
 export const handleCreateNewUserSaga = function* ({ payload }) {
   if (idle) return
   idle = true
   try {
-    const user = yield call(createNewUserRequest, payload)
+    const user = yield call(postRequest, `${baseUrlPath}/users`, payload)
     yield put(userCreateSuccess(user))
     yield put(
       setSnackBar({

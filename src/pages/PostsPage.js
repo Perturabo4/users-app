@@ -62,10 +62,10 @@ const PostsPage = () => {
         {posts.map((post) => {
           return (
             <PostCard
-              key={post.id}
-              id={post.id}
-              body={post.body}
-              title={post.title}
+              key={post['id']}
+              id={post['id']}
+              body={post['body']}
+              title={post['title']}
             />
           )
         })}

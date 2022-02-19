@@ -14,6 +14,7 @@ const AutocompleteField = ({
   label
 }) => {
   const options = useSelector(selector)
+  console.log(options)
   const load = useSelector(selectPersonsLoad)
   const dispatch = useDispatch()
 

@@ -1,7 +1,8 @@
-import { fromJS } from 'immutable'
+import { List, Record } from 'immutable'
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseSwapiUrlPath, ducksPath } from '../../config'
+import { getRequest } from '../../utils/requests'
 
 // action types
 const duckName = 'swapiPersons'
@@ -10,19 +11,21 @@ const FETCH_PERSON_SUCCESS = `${ducksPath}/${duckName}/FETCH_PERSON_SUCCESS`
 const FETCH_PERSON_ERROR = `${ducksPath}/${duckName}/FETCH_PERSON_ERROR`
 
 // reducers
-const initialState = fromJS({
+const record = Record({
   load: false,
-  persons: [],
+  persons: List([]),
   error: null,
   name: ''
 })
+
+const initialState = record()
 
 export default function swapiPersonsReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_PERSON_REQUEST:
       return state.set('load', true).set('name', action.payload)
     case FETCH_PERSON_SUCCESS:
-      return state.set('load', false).set('persons', fromJS(action.payload))
+      return state.set('load', false).set('persons', List(action.payload))
     case FETCH_PERSON_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
@@ -45,21 +48,14 @@ export const swapiFetchError = (error) => ({
   payload: error
 })
 
-// Actions
-
-const fetchPersons = async (name) => {
-  const res = await fetch(`${baseSwapiUrlPath}/?search=${name}`)
-  const persons = await res.json()
-  return persons.results
-}
-
 // selectors
 export const selectPersons = (state) => state.get('swapiPersons')
-export const selectPersonsMemo = createSelector(selectPersons, (swapi) =>
-  swapi.get('persons').toJS()
+export const selectPersonsMemo = createSelector(selectPersons, (swapiPersons) =>
+  swapiPersons['persons'].toArray()
 )
-export const selectPersonsLoad = createSelector(selectPersons, (swapi) =>
-  swapi.get('load')
+export const selectPersonsLoad = createSelector(
+  selectPersons,
+  (swapiPersons) => swapiPersons['load']
 )
 
 // sagas
@@ -68,8 +64,11 @@ export function* fetchPersonsSaga({ payload }) {
   if (idle) return
   idle = true
   try {
-    const users = yield call(fetchPersons, payload)
-    yield put(swapiFetchSuccess(users))
+    const { results } = yield call(
+      getRequest,
+      `${baseSwapiUrlPath}/people/?search=${payload}`
+    )
+    yield put(swapiFetchSuccess(results))
   } catch (error) {
     yield put(swapiFetchError(error))
   } finally {

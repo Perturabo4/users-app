@@ -1,8 +1,8 @@
-import axios from 'axios'
 import { fromJS, List, Record } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
+import { getRequest } from '../../utils/requests'
 
 // Types
 const duckName = 'posts'
@@ -27,7 +27,7 @@ export default function postsReducer(state = initialState, action) {
     case POSTS_FETCH_REQUEST:
       return state.set('load', true).set('userId', action.payload)
     case POSTS_FETCH_SUCCESS:
-      return state.set('load', false).set('posts', fromJS(action.payload))
+      return state.set('load', false).set('posts', List(action.payload))
     case POSTS_FETCH_ERROR:
       return state.set('load', false).set('error', action.payload)
     default:
@@ -71,13 +71,6 @@ export const selectPostsUserId = createSelector(
   (userPosts) => userPosts['userId']
 )
 
-// Requests
-
-const getPosts = async (id) => {
-  const response = await axios.get(`${baseUrlPath}/users/${id}/posts`)
-  return response.data
-}
-
 // Sagas
 
 let idle = false
@@ -87,7 +80,7 @@ export const postsFetchSaga = function* () {
 
   try {
     const userId = yield select(selectPostsUserId)
-    const posts = yield call(getPosts, userId)
+    const posts = yield call(getRequest, `${baseUrlPath}/users/${userId}/posts`)
 
     const cropedPosts = posts.map((post) => {
       post.body = `${post.body.slice(0, 50)}...`
