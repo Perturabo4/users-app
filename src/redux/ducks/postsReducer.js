@@ -21,7 +21,7 @@ const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 
 const record = Record({
   userId: null,
-  load: IDLE_STATUS,
+  status: IDLE_STATUS,
   posts: List(),
   error: null
 })
@@ -111,9 +111,8 @@ export const selectPostsUserId = createSelector(
 
 // Sagas
 
-export const postsFetchSaga = function* () {
+export const postsFetchSaga = function* ({ payload: userId }) {
   try {
-    const userId = yield select(selectPostsUserId)
     const posts = yield call(getRequest, `${baseUrlPath}/users/${userId}/posts`)
 
     const cropedPosts = posts.map((post) => {
