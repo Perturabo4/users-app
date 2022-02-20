@@ -1,35 +1,70 @@
 import { Map, Record } from 'immutable'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
 import { postRequest } from '../../utils/requests'
 import { setSnackBar } from './snackBarReducer'
 
-// CREATE USER TYPES
-const duckName = 'createUser'
+// USER Reducer statuses
+export const IDLE_STATUS = 'idle'
+export const LOADING_STATUS = 'loading'
+export const SUCCESS_STATUS = 'success'
+export const FAILURE_STATUS = 'failure'
 
+// CREATE USER TYPES
+const duckName = 'createUserReducer'
 const CREATE_USER_REQUEST = `${ducksPath}/${duckName}/CREATE_USER_REQUEST`
 const CREATE_USER_SUCCESS = `${ducksPath}/${duckName}/CREATE_USER_SUCCESS`
 const CREATE_USER_ERROR = `${ducksPath}/${duckName}/CREATE_USER_ERROR`
 
-// Reducer
+// Reducers
 
 const record = Record({
-  load: false,
-  user: Map({}),
+  status: IDLE_STATUS,
+  user: Map(),
   error: null
 })
 
 const initialState = record()
 
-export default function createUserReducer(state = initialState, action) {
+const createIdleUserReducer = (state, action) => {
   switch (action.type) {
     case CREATE_USER_REQUEST:
-      return state.set('load', true)
+      return state
+        .set('status', LOADING_STATUS)
+        .set('user', Map())
+        .set('error', null)
+    default:
+      return state
+  }
+}
+
+const createLoadingUserReducer = (state, action) => {
+  switch (action.type) {
     case CREATE_USER_SUCCESS:
-      return state.set('load', false).set('user', Map(action.payload))
+      return state
+        .set('status', SUCCESS_STATUS)
+        .set('user', Map(action.payload))
+        .set('error', null)
     case CREATE_USER_ERROR:
-      return state.set('load', false).set('error', action.payload)
+      return state
+        .set('status', FAILURE_STATUS)
+        .set('user', Map())
+        .set('error', action.payload)
+    default:
+      return state
+  }
+}
+
+export default function createUserReducer(state = initialState, action) {
+  switch (state['status']) {
+    case IDLE_STATUS:
+      return createIdleUserReducer(state, action)
+    case LOADING_STATUS:
+      return createLoadingUserReducer(state, action)
+    case SUCCESS_STATUS:
+    case FAILURE_STATUS:
+      return createIdleUserReducer(state, action)
     default:
       return state
   }
@@ -57,9 +92,9 @@ const selectUser = (state) => state.get('newUser')
 export const selectNewUser = createSelector(selectUser, (newUser) =>
   newUser['user'].toJS()
 )
-export const selectNewUserLoad = createSelector(
+export const selectNewUserStatus = createSelector(
   selectUser,
-  (newUser) => newUser['load']
+  (newUser) => newUser['status']
 )
 export const selectNewUserError = createSelector(
   selectUser,
@@ -67,10 +102,8 @@ export const selectNewUserError = createSelector(
 )
 
 // Sagas
-let idle = false
+
 export const handleCreateNewUserSaga = function* ({ payload }) {
-  if (idle) return
-  idle = true
   try {
     const user = yield call(postRequest, `${baseUrlPath}/users`, payload)
     yield put(userCreateSuccess(user))
@@ -90,11 +123,13 @@ export const handleCreateNewUserSaga = function* ({ payload }) {
         type: 'error'
       })
     )
-  } finally {
-    idle = false
   }
 }
 
 export const watchCreateUserSaga = function* () {
+  const status = select(selectNewUserStatus)
+
+  if (status === LOADING_STATUS) return
+
   yield takeEvery(CREATE_USER_REQUEST, handleCreateNewUserSaga)
 }

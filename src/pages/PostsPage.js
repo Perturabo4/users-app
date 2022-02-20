@@ -8,7 +8,8 @@ import {
   postsFetchRequest,
   selectPostsMemo,
   selectPostsError,
-  selectPostsLoad
+  selectPostsStatus,
+  LOADING_STATUS
 } from '../redux/ducks/postsReducer'
 import { Box } from '@mui/system'
 import { makeStyles } from '@mui/styles'
@@ -29,7 +30,7 @@ const PostsPage = () => {
   const { userId, userName } = useParams()
   const dispatch = useDispatch()
   const posts = useSelector(selectPostsMemo)
-  const load = useSelector(selectPostsLoad)
+  const status = useSelector(selectPostsStatus)
   const error = useSelector(selectPostsError)
   const backLinkStyle = useStyle()
 
@@ -41,9 +42,11 @@ const PostsPage = () => {
     return <ErrorMessage error={error} />
   }
 
-  return load ? (
-    <Loader />
-  ) : (
+  if (status === LOADING_STATUS) {
+    return <Loader />
+  }
+
+  return (
     <Container>
       <Typography
         variant='h2'

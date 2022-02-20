@@ -8,8 +8,10 @@ import Loader from '../components/Loader'
 import {
   selectSinglePost,
   selectSinglePostError,
-  selectSinglePostLoad,
-  postFetchRequest
+  selectSinglePostStatus,
+  postFetchRequest,
+  LOADING_STATUS,
+  FAILURE_STATUS
 } from '../redux/ducks/singlePostReducer'
 import ErrorMessage from '../components/ErrorMessage'
 
@@ -18,20 +20,22 @@ const SinglePostPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const post = useSelector(selectSinglePost)
-  const load = useSelector(selectSinglePostLoad)
+  const status = useSelector(selectSinglePostStatus)
   const error = useSelector(selectSinglePostError)
 
   useEffect(() => {
     dispatch(postFetchRequest(postId))
   }, [])
 
-  if (error) {
+  if (status === FAILURE_STATUS) {
     return <ErrorMessage error={error} />
   }
 
-  return load ? (
-    <Loader />
-  ) : (
+  if (status === LOADING_STATUS) {
+    return <Loader />
+  }
+
+  return (
     <Container>
       <Box>
         <Typography

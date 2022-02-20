@@ -11,10 +11,11 @@ import { add, format, isWithinInterval } from 'date-fns'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import {
-  selectNewUserLoad,
+  selectNewUserStatus,
   userCreateRequest
 } from '../redux/ducks/createUserReducer'
 import {
+  LOADING_STATUS,
   selectPersonsMemo,
   swapiFetchRequest
 } from '../redux/ducks/swapiPersonsReducer'
@@ -127,7 +128,9 @@ const CreateUserPage = () => {
     }
   }, [formState, reset])
 
-  const load = useSelector(selectNewUserLoad)
+  const status = useSelector(selectNewUserStatus)
+
+  const load = status === LOADING_STATUS
 
   const onSubmit = (data) => {
     Object.keys(data).forEach((key) => {

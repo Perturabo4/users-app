@@ -1,11 +1,17 @@
-import { fromJS, List, Record } from 'immutable'
+import { List, Record } from 'immutable'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
 import { getRequest } from '../../utils/requests'
 
+// POSTS Reducer statuses
+export const IDLE_STATUS = 'idle'
+export const LOADING_STATUS = 'loading'
+export const SUCCESS_STATUS = 'success'
+export const FAILURE_STATUS = 'failure'
+
 // Types
-const duckName = 'posts'
+const duckName = 'postsReducer'
 
 const POSTS_FETCH_REQUEST = `${ducksPath}/${duckName}/POSTS_FETCH_REQUEST`
 const POSTS_FETCH_SUCCESS = `${ducksPath}/${duckName}/POSTS_FETCH_SUCCESS`
@@ -14,22 +20,54 @@ const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 // Reducer
 
 const record = Record({
-  userId: 1,
-  load: false,
-  posts: fromJS([]),
+  userId: null,
+  load: IDLE_STATUS,
+  posts: List(),
   error: null
 })
 
 const initialState = record()
 
-export default function postsReducer(state = initialState, action) {
+const postsIdleReducer = (state, action) => {
   switch (action.type) {
     case POSTS_FETCH_REQUEST:
-      return state.set('load', true).set('userId', action.payload)
+      return state
+        .set('status', LOADING_STATUS)
+        .set('posts', List())
+        .set('error', null)
+        .set('userId', action.payload)
+    default:
+      return state
+  }
+}
+
+const postsLoadingReducer = (state, action) => {
+  switch (action.type) {
     case POSTS_FETCH_SUCCESS:
-      return state.set('load', false).set('posts', List(action.payload))
+      return state
+        .set('status', SUCCESS_STATUS)
+        .set('posts', List(action.payload))
+        .set('error', null)
     case POSTS_FETCH_ERROR:
-      return state.set('load', false).set('error', action.payload)
+      return state
+        .set('status', FAILURE_STATUS)
+        .set('posts', List())
+        .set('error', action.payload)
+        .set('userId', null)
+    default:
+      return state
+  }
+}
+
+export default function postsReducer(state = initialState, action) {
+  switch (state['status']) {
+    case IDLE_STATUS:
+      return postsIdleReducer(state, action)
+    case LOADING_STATUS:
+      return postsLoadingReducer(state, action)
+    case SUCCESS_STATUS:
+    case FAILURE_STATUS:
+      return postsIdleReducer(state, action)
     default:
       return state
   }
@@ -58,9 +96,9 @@ export const selectPostsMemo = createSelector(
   selectPosts,
   (userPosts) => userPosts['posts']
 )
-export const selectPostsLoad = createSelector(
+export const selectPostsStatus = createSelector(
   selectPosts,
-  (userPosts) => userPosts['load']
+  (userPosts) => userPosts['status']
 )
 export const selectPostsError = createSelector(
   selectPosts,
@@ -73,11 +111,7 @@ export const selectPostsUserId = createSelector(
 
 // Sagas
 
-let idle = false
 export const postsFetchSaga = function* () {
-  if (idle) return
-  idle = true
-
   try {
     const userId = yield select(selectPostsUserId)
     const posts = yield call(getRequest, `${baseUrlPath}/users/${userId}/posts`)
@@ -91,11 +125,13 @@ export const postsFetchSaga = function* () {
     yield put(postsFetchSuccess(cropedPosts))
   } catch (error) {
     yield put(postsFetchError(error.message))
-  } finally {
-    idle = false
   }
 }
 
 export const watchPostsFetchSaga = function* () {
+  const status = select(selectPostsStatus)
+
+  if (status === LOADING_STATUS) return
+
   yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
 }

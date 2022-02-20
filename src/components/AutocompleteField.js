@@ -2,7 +2,10 @@ import { Autocomplete, TextField } from '@mui/material'
 import React from 'react'
 import { Controller } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectPersonsLoad } from '../redux/ducks/swapiPersonsReducer'
+import {
+  LOADING_STATUS,
+  selectPersonsStatus
+} from '../redux/ducks/swapiPersonsReducer'
 import Loader from './Loader'
 
 const AutocompleteField = ({
@@ -14,8 +17,7 @@ const AutocompleteField = ({
   label
 }) => {
   const options = useSelector(selector)
-  console.log(options)
-  const load = useSelector(selectPersonsLoad)
+  const status = useSelector(selectPersonsStatus)
   const dispatch = useDispatch()
 
   return (
@@ -32,19 +34,21 @@ const AutocompleteField = ({
           isOptionEqualToValue={(value, option) =>
             option[labelKey] === value[labelKey]
           }
-          loading={load}
+          loading={status === LOADING_STATUS}
           loadingText={
             <>
               Loading <Loader size={12} />
             </>
           }
           renderInput={(params) => (
-            <TextField
-              {...params}
-              size='small'
-              label={label}
-              variant='outlined'
-            />
+            <>
+              <TextField
+                {...params}
+                size='small'
+                label={label}
+                variant='outlined'
+              />
+            </>
           )}
           onInputChange={(event, newInputValue) =>
             dispatch(actionToGetOptions(newInputValue))

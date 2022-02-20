@@ -7,8 +7,10 @@ import UserCard from '../components/UserCard'
 import {
   selectUsersMemo,
   selectUsersError,
-  selectUsersLoad,
-  usersFetchRequest
+  usersFetchRequest,
+  selectUsersStatus,
+  LOADING_STATUS,
+  FAILURE_STATUS
 } from '../redux/ducks/usersReducer'
 import ErrorMessage from '../components/ErrorMessage'
 
@@ -20,7 +22,7 @@ const UsersPage = () => {
   }, [])
 
   const users = useSelector(selectUsersMemo)
-  const load = useSelector(selectUsersLoad)
+  const status = useSelector(selectUsersStatus)
   const error = useSelector(selectUsersError)
 
   const useStyles = makeStyles({
@@ -32,13 +34,15 @@ const UsersPage = () => {
 
   const styles = useStyles()
 
-  if (error) {
+  if (status === FAILURE_STATUS) {
     return <ErrorMessage error={error} />
   }
 
-  return load ? (
-    <Loader />
-  ) : (
+  if (status === LOADING_STATUS) {
+    return <Loader />
+  }
+
+  return (
     <Container>
       <Typography variant='h2' component='h1' className={styles.root}>
         All users

@@ -4,6 +4,12 @@ import { createSelector } from 'reselect'
 import { baseUrlPath, ducksPath } from '../../config'
 import { getRequest } from '../../utils/requests'
 
+// SINGLE POST Reducer statuses
+export const IDLE_STATUS = 'idle'
+export const LOADING_STATUS = 'loading'
+export const SUCCESS_STATUS = 'success'
+export const FAILURE_STATUS = 'failure'
+
 // Types
 const duckName = 'singlePost'
 const SINGLE_POST_REQUEST = `${ducksPath}/${duckName}/SINGLE_POST_REQUEST`
@@ -13,22 +19,54 @@ const SINGLE_POST_ERROR = `${ducksPath}/${duckName}/SINGLE_POST_ERROR`
 // Reducer
 
 const record = Record({
-  postId: 1,
-  load: false,
-  post: {},
+  status: IDLE_STATUS,
+  postId: null,
+  post: Map(),
   error: null
 })
 
 const initialState = record()
 
-export default function singlePostReducer(state = initialState, action) {
+const singlePostIdleReducer = (state, action) => {
   switch (action.type) {
     case SINGLE_POST_REQUEST:
-      return state.set('load', true).set('postId', action.payload)
+      return state
+        .set('status', LOADING_STATUS)
+        .set('post', Map())
+        .set('error', null)
+        .set('postId', action.payload)
+    default:
+      return state
+  }
+}
+
+const singlePostLoadingReducer = (state, action) => {
+  switch (action.type) {
     case SINGLE_POST_SUCCESS:
-      return state.set('load', false).set('post', Map(action.payload))
+      return state
+        .set('status', SUCCESS_STATUS)
+        .set('post', Map(action.payload))
+        .set('error', null)
     case SINGLE_POST_ERROR:
-      return state.set('load', false).set('error', action.payload)
+      return state
+        .set('status', FAILURE_STATUS)
+        .set('post', Map())
+        .set('error', action.payload)
+        .set('postId', null)
+    default:
+      return state
+  }
+}
+
+export default function singlePostReducer(state = initialState, action) {
+  switch (state['status']) {
+    case IDLE_STATUS:
+      return singlePostIdleReducer(state, action)
+    case LOADING_STATUS:
+      return singlePostLoadingReducer(state, action)
+    case SUCCESS_STATUS:
+    case FAILURE_STATUS:
+      return singlePostIdleReducer(state, action)
     default:
       return state
   }
@@ -60,9 +98,9 @@ export const selectSinglePostError = createSelector(
   selectPost,
   (state) => state['error']
 )
-export const selectSinglePostLoad = createSelector(
+export const selectSinglePostStatus = createSelector(
   selectPost,
-  (state) => state['load']
+  (state) => state['status']
 )
 export const selectSinglePostId = createSelector(
   selectPost,
@@ -70,9 +108,7 @@ export const selectSinglePostId = createSelector(
 )
 
 // Sagas
-let idle = false
 export const handlePostFetchSaga = function* () {
-  if (idle) return
   try {
     const postId = yield select(selectSinglePostId)
 
@@ -81,11 +117,13 @@ export const handlePostFetchSaga = function* () {
     yield put(postFetchSuccess(post))
   } catch (error) {
     yield put(postFetchError(error.message))
-  } finally {
-    idle = false
   }
 }
 
 export const watchPostFetchSaga = function* () {
+  const status = select(selectSinglePostStatus)
+
+  if (status === LOADING_STATUS) return
+
   yield takeEvery(SINGLE_POST_REQUEST, handlePostFetchSaga)
 }
