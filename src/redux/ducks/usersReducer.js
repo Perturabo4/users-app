@@ -13,6 +13,7 @@ export const FAILURE_STATUS = 'failure'
 // ALL USERS ACTION TYPES
 const duckName = 'users'
 const USERS_FETCH_REQUEST = `${ducksPath}/${duckName}/USERS_FETCH_REQUEST`
+const USERS_SET_PROGRESS = `${ducksPath}/${duckName}/USERS_SET_PROGRESS`
 const USERS_FETCH_SUCCES = `${ducksPath}/${duckName}/USERS_FETCH_SUCCES`
 const USERS_FETCH_ERROR = `${ducksPath}/${duckName}/USERS_FETCH_ERROR`
 
@@ -20,6 +21,7 @@ const USERS_FETCH_ERROR = `${ducksPath}/${duckName}/USERS_FETCH_ERROR`
 
 const record = Record({
   status: IDLE_STATUS,
+  inProgress: false,
   users: List(),
   error: null
 })
@@ -31,6 +33,7 @@ const usersIdleReducer = (state, action) => {
     case USERS_FETCH_REQUEST:
       return state
         .set('status', LOADING_STATUS)
+        .set('inProgress', false)
         .set('users', List())
         .set('error', null)
     default:
@@ -39,14 +42,22 @@ const usersIdleReducer = (state, action) => {
 }
 const usersLoadingReducer = (state, action) => {
   switch (action.type) {
+    case USERS_SET_PROGRESS:
+      return state
+        .set('status', LOADING_STATUS)
+        .set('inProgress', true)
+        .set('users', List(action.payload))
+        .set('error', null)
     case USERS_FETCH_SUCCES:
       return state
         .set('status', SUCCESS_STATUS)
+        .set('inProgress', false)
         .set('users', List(action.payload))
         .set('error', null)
     case USERS_FETCH_ERROR:
       return state
         .set('status', FAILURE_STATUS)
+        .set('inProgress', false)
         .set('users', List())
         .set('error', action.payload)
     default:
@@ -72,6 +83,8 @@ export default function usersReducer(state = initialState, action) {
 
 export const usersFetchRequest = () => ({ type: USERS_FETCH_REQUEST })
 
+export const usersSetProgress = () => ({ type: USERS_SET_PROGRESS })
+
 export const usersFetchSuccess = (users) => ({
   type: USERS_FETCH_SUCCES,
   payload: users
@@ -84,6 +97,8 @@ export const usersFetchError = (error) => ({
 
 // Selectors
 export const selectUsers = (state) => state.get('allUsers')
+
+const selectProgress = (state) => state.getIn(['allUsers', 'inProgress'])
 
 export const selectUsersMemo = createSelector(
   selectUsers,
@@ -101,6 +116,12 @@ export const selectUsersError = createSelector(
 // Sagas
 
 export const handleUsersSaga = function* () {
+  const progress = yield select(selectProgress)
+
+  if (progress) return
+
+  yield put(usersSetProgress())
+
   try {
     const users = yield call(getRequest, `${baseUrlPath}/users`)
     yield put(usersFetchSuccess(users))
@@ -110,9 +131,5 @@ export const handleUsersSaga = function* () {
 }
 
 export const watchUsersFetchSaga = function* () {
-  const status = yield select(selectUsersStatus)
-
-  if (status === LOADING_STATUS) return
-
   yield takeEvery(USERS_FETCH_REQUEST, handleUsersSaga)
 }

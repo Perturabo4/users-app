@@ -11,9 +11,10 @@ export const SUCCESS_STATUS = 'success'
 export const FAILURE_STATUS = 'failure'
 
 // Types
-const duckName = 'singlePost'
+const duckName = 'singlePostReducer'
 const SINGLE_POST_REQUEST = `${ducksPath}/${duckName}/SINGLE_POST_REQUEST`
 const SINGLE_POST_SUCCESS = `${ducksPath}/${duckName}/SINGLE_POST_SUCCESS`
+const SINGLE_POST_SET_PROGRESS = `${ducksPath}/${duckName}/SINGLE_POST_SET_PROGRESS`
 const SINGLE_POST_ERROR = `${ducksPath}/${duckName}/SINGLE_POST_ERROR`
 
 // Reducer
@@ -21,6 +22,7 @@ const SINGLE_POST_ERROR = `${ducksPath}/${duckName}/SINGLE_POST_ERROR`
 const record = Record({
   status: IDLE_STATUS,
   postId: null,
+  inProgress: false,
   post: Map(),
   error: null
 })
@@ -74,14 +76,20 @@ export default function singlePostReducer(state = initialState, action) {
 
 // Actions
 
+export const postSetProgress = () => ({
+  type: SINGLE_POST_SET_PROGRESS
+})
+
 export const postFetchRequest = (userId) => ({
   type: SINGLE_POST_REQUEST,
   payload: userId
 })
+
 export const postFetchSuccess = (post) => ({
   type: SINGLE_POST_SUCCESS,
   payload: post
 })
+
 export const postFetchError = (error) => ({
   type: SINGLE_POST_ERROR,
   payload: error
@@ -94,20 +102,24 @@ export const selectSinglePost = createSelector(
   selectPost,
   (state) => state['post']
 )
+
 export const selectSinglePostError = createSelector(
   selectPost,
   (state) => state['error']
 )
+
 export const selectSinglePostStatus = createSelector(
   selectPost,
   (state) => state['status']
 )
+
 export const selectSinglePostId = createSelector(
   selectPost,
   (state) => state['postId']
 )
 
 // Sagas
+
 export const handlePostFetchSaga = function* () {
   try {
     const postId = yield select(selectSinglePostId)
@@ -121,9 +133,5 @@ export const handlePostFetchSaga = function* () {
 }
 
 export const watchPostFetchSaga = function* () {
-  const status = select(selectSinglePostStatus)
-
-  if (status === LOADING_STATUS) return
-
   yield takeEvery(SINGLE_POST_REQUEST, handlePostFetchSaga)
 }
