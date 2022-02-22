@@ -14,6 +14,7 @@ export const FAILURE_STATUS = 'failure'
 // CREATE USER TYPES
 const duckName = 'createUserReducer'
 const CREATE_USER_REQUEST = `${ducksPath}/${duckName}/CREATE_USER_REQUEST`
+const USER_SET_PROGRESS = `${ducksPath}/${duckName}/USER_SET_PROGRESS`
 const CREATE_USER_SUCCESS = `${ducksPath}/${duckName}/CREATE_USER_SUCCESS`
 const CREATE_USER_ERROR = `${ducksPath}/${duckName}/CREATE_USER_ERROR`
 
@@ -21,6 +22,7 @@ const CREATE_USER_ERROR = `${ducksPath}/${duckName}/CREATE_USER_ERROR`
 
 const record = Record({
   status: IDLE_STATUS,
+  inProgress: false,
   user: Map(),
   error: null
 })
@@ -32,6 +34,7 @@ const createIdleUserReducer = (state, action) => {
     case CREATE_USER_REQUEST:
       return state
         .set('status', LOADING_STATUS)
+        .set('inProgress', false)
         .set('user', Map())
         .set('error', null)
     default:
@@ -41,14 +44,18 @@ const createIdleUserReducer = (state, action) => {
 
 const createLoadingUserReducer = (state, action) => {
   switch (action.type) {
+    case USER_SET_PROGRESS:
+      return state.set('inProgress', true)
     case CREATE_USER_SUCCESS:
       return state
         .set('status', SUCCESS_STATUS)
+        .set('inProgress', false)
         .set('user', Map(action.payload))
         .set('error', null)
     case CREATE_USER_ERROR:
       return state
         .set('status', FAILURE_STATUS)
+        .set('inProgress', false)
         .set('user', Map())
         .set('error', action.payload)
     default:
@@ -72,6 +79,9 @@ export default function createUserReducer(state = initialState, action) {
 
 // Actions
 
+export const setProgress = () => ({
+  type: USER_SET_PROGRESS
+})
 export const userCreateRequest = (user) => ({
   type: CREATE_USER_REQUEST,
   payload: user
@@ -88,6 +98,7 @@ export const userCreateError = (error) => ({
 // Selectors
 
 const selectUser = (state) => state.get('newUser')
+const selectProgress = (state) => state.getIn(['newUser', 'inProgress'])
 
 export const selectNewUser = createSelector(selectUser, (newUser) =>
   newUser['user'].toJS()
@@ -104,6 +115,12 @@ export const selectNewUserError = createSelector(
 // Sagas
 
 export const handleCreateNewUserSaga = function* ({ payload }) {
+  const progress = yield select(selectProgress)
+
+  if (progress) return
+
+  yield put(setProgress())
+
   try {
     const user = yield call(postRequest, `${baseUrlPath}/users`, payload)
     yield put(userCreateSuccess(user))
@@ -127,9 +144,5 @@ export const handleCreateNewUserSaga = function* ({ payload }) {
 }
 
 export const watchCreateUserSaga = function* () {
-  const status = select(selectNewUserStatus)
-
-  if (status === LOADING_STATUS) return
-
   yield takeEvery(CREATE_USER_REQUEST, handleCreateNewUserSaga)
 }

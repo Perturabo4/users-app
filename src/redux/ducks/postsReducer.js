@@ -14,6 +14,7 @@ export const FAILURE_STATUS = 'failure'
 const duckName = 'postsReducer'
 
 const POSTS_FETCH_REQUEST = `${ducksPath}/${duckName}/POSTS_FETCH_REQUEST`
+const POSTS_SET_PROGRESS = `${ducksPath}/${duckName}/POSTS_SET_PROGRESS`
 const POSTS_FETCH_SUCCESS = `${ducksPath}/${duckName}/POSTS_FETCH_SUCCESS`
 const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 
@@ -22,6 +23,7 @@ const POSTS_FETCH_ERROR = `${ducksPath}/${duckName}/POSTS_FETCH_ERROR`
 const record = Record({
   userId: null,
   status: IDLE_STATUS,
+  inProgress: false,
   posts: List(),
   error: null
 })
@@ -33,6 +35,7 @@ const postsIdleReducer = (state, action) => {
     case POSTS_FETCH_REQUEST:
       return state
         .set('status', LOADING_STATUS)
+        .set('inProgress', false)
         .set('posts', List())
         .set('error', null)
         .set('userId', action.payload)
@@ -43,9 +46,12 @@ const postsIdleReducer = (state, action) => {
 
 const postsLoadingReducer = (state, action) => {
   switch (action.type) {
+    case POSTS_SET_PROGRESS:
+      return state.set('inProgress', false)
     case POSTS_FETCH_SUCCESS:
       return state
         .set('status', SUCCESS_STATUS)
+        .set('inProgress', false)
         .set('posts', List(action.payload))
         .set('error', null)
     case POSTS_FETCH_ERROR:
@@ -75,14 +81,20 @@ export default function postsReducer(state = initialState, action) {
 
 // Actions
 
+export const postsSetProgress = (userId) => ({
+  type: POSTS_SET_PROGRESS
+})
+
 export const postsFetchRequest = (userId) => ({
   type: POSTS_FETCH_REQUEST,
   payload: userId
 })
+
 export const postsFetchSuccess = (posts) => ({
   type: POSTS_FETCH_SUCCESS,
   payload: posts
 })
+
 export const postsFetchError = (error) => ({
   type: POSTS_FETCH_ERROR,
   payload: error
@@ -90,7 +102,9 @@ export const postsFetchError = (error) => ({
 
 // Selectors
 
-export const selectPosts = (state) => state.get('userPosts')
+const selectProgress = (state) => state.getIn(['userPosts', 'inProgress'])
+
+const selectPosts = (state) => state.get('userPosts')
 
 export const selectPostsMemo = createSelector(
   selectPosts,
@@ -112,6 +126,12 @@ export const selectPostsUserId = createSelector(
 // Sagas
 
 export const postsFetchSaga = function* ({ payload: userId }) {
+  const progress = yield select(selectProgress)
+
+  if (progress) return
+
+  yield put(postsSetProgress())
+
   try {
     const posts = yield call(getRequest, `${baseUrlPath}/users/${userId}/posts`)
 
@@ -128,9 +148,5 @@ export const postsFetchSaga = function* ({ payload: userId }) {
 }
 
 export const watchPostsFetchSaga = function* () {
-  const status = select(selectPostsStatus)
-
-  if (status === LOADING_STATUS) return
-
   yield takeEvery(POSTS_FETCH_REQUEST, postsFetchSaga)
 }

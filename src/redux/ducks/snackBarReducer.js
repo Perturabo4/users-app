@@ -4,7 +4,7 @@ import { Record } from 'immutable'
 import { createSelector } from 'reselect'
 import { ducksPath } from '../../config'
 
-const duckName = 'snackBar'
+const duckName = 'snackBarReducer'
 const SET_SNACKBAR = `${ducksPath}/${duckName}/SET_SNACKBAR`
 
 // Reducer

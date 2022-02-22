@@ -34,6 +34,7 @@ const singlePostIdleReducer = (state, action) => {
     case SINGLE_POST_REQUEST:
       return state
         .set('status', LOADING_STATUS)
+        .set('inProgress', false)
         .set('post', Map())
         .set('error', null)
         .set('postId', action.payload)
@@ -44,14 +45,19 @@ const singlePostIdleReducer = (state, action) => {
 
 const singlePostLoadingReducer = (state, action) => {
   switch (action.type) {
+    case SINGLE_POST_SET_PROGRESS:
+      return state.set('inProgress', true)
     case SINGLE_POST_SUCCESS:
       return state
         .set('status', SUCCESS_STATUS)
+        .set('inProgress', false)
         .set('post', Map(action.payload))
         .set('error', null)
+        .set('postId', null)
     case SINGLE_POST_ERROR:
       return state
         .set('status', FAILURE_STATUS)
+        .set('inProgress', false)
         .set('post', Map())
         .set('error', action.payload)
         .set('postId', null)
@@ -97,6 +103,7 @@ export const postFetchError = (error) => ({
 
 // Selectors
 const selectPost = (state) => state.get('singlePost')
+const selectProgress = (state) => state.getIn(['singlePost', 'inProgress'])
 
 export const selectSinglePost = createSelector(
   selectPost,
@@ -121,6 +128,12 @@ export const selectSinglePostId = createSelector(
 // Sagas
 
 export const handlePostFetchSaga = function* () {
+  const progress = yield select(selectProgress)
+
+  if (progress) return
+
+  yield put(postSetProgress())
+
   try {
     const postId = yield select(selectSinglePostId)
 

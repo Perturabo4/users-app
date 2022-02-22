@@ -11,7 +11,7 @@ export const SUCCESS_STATUS = 'success'
 export const FAILURE_STATUS = 'failure'
 
 // ALL USERS ACTION TYPES
-const duckName = 'users'
+const duckName = 'usersReducer'
 const USERS_FETCH_REQUEST = `${ducksPath}/${duckName}/USERS_FETCH_REQUEST`
 const USERS_SET_PROGRESS = `${ducksPath}/${duckName}/USERS_SET_PROGRESS`
 const USERS_FETCH_SUCCES = `${ducksPath}/${duckName}/USERS_FETCH_SUCCES`

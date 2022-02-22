@@ -50,7 +50,6 @@ const swapiLoadingPersonsReducer = (state, action) => {
       return state
         .set('status', LOADING_STATUS)
         .set('inProgress', true)
-        .set('persons', List(action.payload))
         .set('error', null)
         .set('name', '')
     case FETCH_PERSONS_SUCCESS:
@@ -132,8 +131,6 @@ export const selectPersonsError = createSelector(
 
 export function* fetchPersonsSaga({ payload }) {
   const progress = yield select(selectProgress)
-
-  console.log('Saga', progress)
 
   if (progress) return
 
